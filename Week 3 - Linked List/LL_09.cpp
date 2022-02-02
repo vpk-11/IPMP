@@ -11,63 +11,101 @@ public:
 Node *head1 = new Node;
 Node *head2 = new Node;
 
-void getIntersectionNode()
+void create2(Node *head)
 {
-    Node *temp1 = head1;
-    Node *temp2 = head2; bool flag = false;
-    while (temp1!=NULL)
+    cout << "Enter Head Data: ";
+    int x;
+    cin >> x;
+    if (x != -1)
+        head->data = x;
+    else
+        return;
+    Node *temp = head;
+    while (x != -1)
     {
-        temp1->visited = true;
-        temp1 = temp1->next;
-    }
-    while (temp2!=NULL)
-    {
-        if (temp2->visited == true)
+        printf("Enter data of the next node of %d: ", temp->data);
+        cin >> x;
+        if (x != -1)
         {
-            bool flag = true;
-            break;
-        } else{
-            temp2->visited = true;
-            temp2 = temp2->next;
+            Node *p = new Node;
+            p->data = x;
+            p->next = NULL;
+            temp->next = p;
+            temp = p;
         }
+        else
+            break;
     }
-    if (flag)
+}
+
+int length(Node *head)
+{
+    Node *current = head;
+    int count = 0;
+    while (current != NULL)
     {
-        cout<<"Intersection exists and it is at: "<<temp2->data<<endl;
-    } else{
-        cout<<"No intersection"<<endl;
+        count++;
+        current = current->next;
     }
-    
-    
+    return count;
+}
+
+int _getIntesectionNode(int d, Node *head1, Node *head2)
+{
+    Node *current1 = head1;
+    Node *current2 = head2;
+
+    for (int i = 0; i < d; i++)
+    {
+        if (current1 == NULL)
+        {
+            return -1;
+        }
+        current1 = current1->next;
+    }
+
+    while (current1 != NULL && current2 != NULL)
+    {
+        if (current1 == current2)
+            return current1->data;
+
+        current1 = current1->next;
+        current2 = current2->next;
+    }
+
+    return -1;
+}
+int getIntesectionNode(Node *head1, Node *head2)
+{
+    int c1 = length(head1);
+    int c2 = length(head2);
+    if (c1 > c2)
+        return _getIntesectionNode(c1 - c2, head1, head2);
+
+    else
+        return _getIntesectionNode(c2 - c1, head2, head1);
+}
+void display(Node *p)
+{
+    if (p != NULL)
+    {
+        cout << p->data << " ";
+        display(p->next);
+    }
 }
 
 int main()
 {
-    Node *newNode;
-
-    head1->data = 10;
-
-    Node *head2 = new Node();
-    head2->data = 3;
-
-    newNode = new Node();
-    newNode->data = 6;
-    head2->next = newNode;
-
-    newNode = new Node();
-    newNode->data = 9;
-    head2->next->next = newNode;
-
-    newNode = new Node();
-    newNode->data = 15;
-    head1->next = newNode;
-    head2->next->next->next = newNode;
-
-    newNode = new Node();
-    newNode->data = 30;
-    head1->next->next = newNode;
-
-    head1->next->next->next = NULL;
-
-    getIntersectionNode();
+    create2(head1);
+    create2(head2);
+    head1->next->next = head2->next;
+    display(head1);
+    cout<<endl;
+    display(head2);
+    cout<<endl;
+    int x = getIntesectionNode(head1,head2);
+    if(x!= -1)
+        cout << "Data at point of intersection is " << x << endl;
+    else
+        cout<<"There is no point of intersection"<<endl;
 }

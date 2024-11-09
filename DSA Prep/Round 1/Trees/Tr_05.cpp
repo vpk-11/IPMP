@@ -1,149 +1,111 @@
-// Check if trees are same
+// Identical Trees
 #include <iostream>
-#include <queue>
 #include <algorithm>
-
+#include <queue>
+#include <stack>
 using namespace std;
-class Node
-{
-public:
-    int data;
-    Node *lchild;
-    Node *rchild;
-};
-Node *root1 = new Node;
-Node *root2 = new Node;
 
-void create(Node *root)
-{
-    queue<Node *> q;
-    Node *p, *t;
+class Node {
+    public:
+    int data;
+    Node *lChild;
+    Node *rChild;
+};
+Node *root1 = new Node();
+Node *root2 = new Node();
+
+void create(Node *root){
+    Node *p = new Node();
+    queue <Node *> q;
     int x;
-    cout << "Enter Root Value ";
-    cin >> x;
-    root->data = x;
-    root->lchild = root->rchild = NULL;
+    cout<<"Enter root value: ";
+    cin>>x;
+    if (x!=-1)
+        root->data = x;
+    
+    root->lChild = root->rChild = NULL;
     q.push(root);
     while (!q.empty())
     {
-        p = q.front();
-        q.pop();
-        printf("Enter Left Child of %d: ", p->data);
-        cin >> x;
-        if (x != -1)
+        p = q.front(); q.pop();
+        printf("Enter Left Child of %d: ",p->data);
+        cin>>x;
+        if (x!= -1)
         {
-            t = new Node;
+            Node *t = new Node;
             t->data = x;
-            t->lchild = t->rchild = NULL;
-            p->lchild = t;
+            t->lChild = t->rChild = NULL;
+            p->lChild = t;
             q.push(t);
         }
-        printf("Enter Right Child of %d: ", p->data);
-        cin >> x;
-        if (x != -1)
+        printf("Enter Right Child of %d: ",p->data);
+        cin>>x;
+        if (x!= -1)
         {
-            t = new Node;
+            Node *t = new Node;
             t->data = x;
-            t->lchild = t->rchild = NULL;
-            p->rchild = t;
+            t->lChild = t->rChild = NULL;
+            p->rChild = t;
             q.push(t);
         }
     }
 }
-
-void Preorder(Node *p)
-{
-    if (p)
-    {
-        cout << p->data << " ";
-        Preorder(p->lchild);
-        Preorder(p->rchild);
-    }
-}
-
-bool sameTrees(Node *root1, Node *root2)
-{
-    if ((root1 == NULL && root2) || (root2 == NULL && root1))
-    {
+bool identityCheck(Node *p1, Node* p2){
+    if (p1 == NULL || p2 == NULL)
         return false;
-    }
-    if (root1->data != root2->data)
-    {
+    
+    queue <Node *> q1, q2;
+    if (p1->data != p2->data)
         return false;
-    }
-    queue<Node *> q1, q2;
-    Node *p1, *p2;
-    q1.push(root1);
-    q2.push(root2);
+    
+    q1.push(p1);
+    q2.push(p2);
     while (!q1.empty() && !q2.empty())
     {
-        p1 = q1.front();
-        p2 = q2.front();
-        q1.pop();
-        q2.pop();
-        if (p1->lchild && p2->lchild)
+        p1 = q1.front(); q1.pop();
+        p2 = q2.front(); q2.pop();
+        if (p1->lChild && p2->lChild)
         {
-            if (p1->lchild->data != p2->lchild->data)
-            {
+            if (p1->lChild->data != p2->lChild->data)
                 return false;
-            }
-            else
-            {
-                q1.push(p1->lchild);
-                q2.push(p2->lchild);
-            }
-        }
-        else
+            q1.push(p1->lChild);
+            q2.push(p2->lChild);
+        } else
+            return false;
+        if (p1->rChild && p2->rChild)
         {
-            if ((p1->lchild && p2->lchild == NULL) || (p1->lchild == NULL && p2->lchild))
-            {
+            if (p1->rChild->data != p2->rChild->data)
                 return false;
-            }
-        }
-        if (p1->rchild && p2->rchild)
-        {
-            if (p1->rchild->data != p2->rchild->data)
-            {
-                return false;
-            }
-            else
-            {
-                q1.push(p1->rchild);
-                q2.push(p2->rchild);
-            }
-        }
-        else
-        {
-            if ((p1->rchild && p2->rchild == NULL) || (p1->rchild == NULL && p2->rchild))
-            {
-                return false;
-            }
-        }
+            q1.push(p1->rChild);
+            q2.push(p2->rChild);
+        } else
+            return false;
     }
-    if ((q1.empty() && !q2.empty()) || (!q1.empty() && q2.empty()))
-    {
-        return false;
-    }
+    if (!q1.empty() || !q2.empty())
+        if (q1.size() > q2.size() || q1.size() < q2.size())
+            return false;
+    
     return true;
 }
 
-int main()
-{
+void preOrder(Node *p){
+    if (p)
+    {
+        cout<<p->data<<" ";
+        preOrder(p->lChild);
+        preOrder(p->rChild);
+    }
+}
+
+int main(){
     create(root1);
-    cout << "Preorder: ";
-    Preorder(root1);
-    cout << endl;
     create(root2);
-    cout << "Preorder: ";
-    Preorder(root2);
-    cout << endl;
-    if (sameTrees(root1, root2))
+    preOrder(root1); cout<<endl;
+    preOrder(root2); cout<<endl;
+    if (identityCheck(root1, root2))
     {
-        cout<< "Same Trees Bruv" << endl;
-    }
-    else
-    {
-        cout << "Nah bruh" << endl;
-    }
-    return 0;   
+        cout<<"Trees are Identical"<<endl;
+    } else
+        cout<<"Trees are not identical"<<endl;
+    
 }

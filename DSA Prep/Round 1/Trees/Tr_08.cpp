@@ -2,8 +2,6 @@
 #include <iostream>
 #include <queue>
 #include <stack>
-#include <algorithm>
-#include <vector>
 
 using namespace std;
 class Node
@@ -83,6 +81,36 @@ void Rec_Preorder(Node *p)
         Rec_Preorder(p->rchild);
     }
 }
+void printLevel(Node *p, int level){
+    if (level == 1)
+    {
+        cout<<p->data<<" ";
+    } else{
+        printLevel(p->lchild, level-1);
+        printLevel(p->rchild, level-1);
+    }
+}
+
+int height(Node *p)
+{
+    int x = 0, y = 0;
+    if (p == NULL)
+        return 0;
+
+    x = height(p->lchild);
+    y = height(p->rchild);
+    if (x > y)
+        return x + 1;
+    else
+        return y + 1;
+}
+
+void Rec_LevelOrder(Node *p){
+    for (int i = 0; i < height(root); i++)
+    {
+        printLevel(p, i);
+    }
+}
 
 int main()
 {
@@ -90,7 +118,6 @@ int main()
     cout << "Preorder: ";
     Rec_Preorder(root);
     cout << endl;
-    cout << "Level Order: ";
     LevelOrder(root);
     cout << endl;
 

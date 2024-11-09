@@ -1,33 +1,37 @@
-// Segregate 0s & 1s
+// Put all 0s in the end
 #include <iostream>
-#include <algorithm>
-#include <vector>
 using namespace std;
 
-void segregate0sAnd1s(int arr[], int n)
+void pushZeroToEnd(int arr[], int n)
 {
-    int j = -1;
+    int count = 0;
     for (int i = 0; i < n; i++)
     {
-        if (arr[i] == 0)
+        if (arr[i]!= 0)
         {
-            j++;
-            swap(arr[i], arr[j]);
+            arr[count] = arr[i];
+            count++;
         }
+    }
+    while (count<n)
+    {
+        arr[count] = 0;
+        count++;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
     }
 }
 
 int main()
 {
-    int arr[] = { 0, 1, 0, 1, 1, 1 };
+    int arr[] = {1,2,3,0,4,0,6,0,5};
     int n = sizeof(arr) / sizeof(arr[0]);
-    int i = 0;
-
-    segregate0sAnd1s(arr, n);
-
-    cout << "Array after segregation ";
-    for (i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
+    {
         cout << arr[i] << " ";
+    }
     cout << endl;
-    return 0;
+    pushZeroToEnd(arr, n);
 }

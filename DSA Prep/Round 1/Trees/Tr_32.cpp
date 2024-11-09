@@ -1,7 +1,7 @@
-// Check if Tree is Balanced or Not
+// Foldable Tree
 #include <iostream>
 #include <queue>
-#include <algorithm>
+#include <stack>
 
 using namespace std;
 class Node
@@ -60,29 +60,50 @@ void Preorder(Node *p)
     }
 }
 
-int height(Node *p)
+void mirror(Node *p)
 {
     if (p == NULL)
-        return 0;
-
-    return 1 + max(height(p->lchild), height(p->rchild));
+        return;
+    else
+    {
+        Node *temp;
+        // Call Subtrees
+        mirror(p->lchild);
+        mirror(p->rchild);
+        // Swap Children
+        temp = p->lchild;
+        p->lchild = p->rchild;
+        p->rchild = temp;
+    }
 }
 
-bool isBalanced(Node *p)
+bool isStructSame(Node *a, Node *b)
 {
-    int lh;
-    int rh;
-
-    if (p == NULL)
-        return 1;
-
-    lh = height(p->lchild);
-    rh = height(p->rchild);
-
-    if (abs(lh - rh) <= 1 && isBalanced(p->lchild) && isBalanced(p->rchild))
-        return 1;
-
+    if (a == NULL && b == NULL)
+    {
+        return true;
+    }
+    if (a != NULL && b != NULL)
+    {
+        if (isStructSame(a->lchild, b->lchild) && isStructSame(a->rchild, b->rchild))
+        {
+            return true;
+        }
+    }
     return false;
+}
+
+bool isFoldable(Node *p)
+{
+    if (p == NULL)
+    {
+        return true;
+    }
+    bool res;
+    mirror(p->lchild);
+    res = isStructSame(p->lchild, p->rchild);
+    mirror(p->lchild);
+    return res;
 }
 
 int main()
@@ -91,12 +112,13 @@ int main()
     cout << "Preorder: ";
     Preorder(root);
     cout << endl;
-    if (isBalanced(root))
+    if (isFoldable(root) == 1)
     {
-        cout << "Suiiii" << endl;
+        cout << "Tree is foldable" << endl;
     }
     else
     {
-        cout << "Die Stargen" << endl;
+        cout << "Tree is not foldable" << endl;
     }
+    return 0;
 }

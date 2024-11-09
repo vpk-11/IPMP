@@ -1,113 +1,106 @@
-// Least Common Ancestor in BST
+// Sum Tree
 #include <iostream>
-using namespace std;
+#include <queue>
+#include <stack>
 
-struct Node
+using namespace std;
+class Node
 {
+public:
     int data;
     Node *lchild;
     Node *rchild;
 };
-Node *root = NULL;
+Node *root = new Node;
 
-void Insert(int key)
+void create(Node *root)
 {
-    Node *t = root;
-    Node *p, *r;
-    if (root == NULL)
+    queue<Node *> q;
+    Node *p, *t;
+    int x;
+    cout << "Enter Root Value ";
+    cin >> x;
+    root->data = x;
+    root->lchild = root->rchild = NULL;
+    q.push(root);
+    while (!q.empty())
     {
-        p = new Node;
-        p->data = key;
-        p->lchild = p->rchild = NULL;
-        root = p;
-        return;
+        p = q.front();
+        q.pop();
+        printf("Enter Left Child of %d: ", p->data);
+        cin >> x;
+        if (x != -1)
+        {
+            t = new Node;
+            t->data = x;
+            t->lchild = t->rchild = NULL;
+            p->lchild = t;
+            q.push(t);
+        }
+        printf("Enter Right Child of %d: ", p->data);
+        cin >> x;
+        if (x != -1)
+        {
+            t = new Node;
+            t->data = x;
+            t->lchild = t->rchild = NULL;
+            p->rchild = t;
+            q.push(t);
+        }
     }
-    while (t != NULL)
+}
+
+void Preorder(Node *p)
+{
+    if (p)
     {
-        r = t;
-        if (key < t->data)
-        {
-            t = t->lchild;
-        }
-        else if (key > t->data)
-        {
-            t = t->rchild;
-        }
-        else
-        {
-            return;
-        }
+        cout << p->data << " ";
+        Preorder(p->lchild);
+        Preorder(p->rchild);
     }
-    p = new Node;
-    p->data = key;
-    p->lchild = p->rchild = NULL;
-    if (r->data > p->data)
+}
+
+int sum(Node *p)
+{
+    if (p == NULL)
     {
-        r->lchild = p;
+        return 0;
     }
     else
     {
-        r->rchild = p;
+        return p->data + sum(p->lchild) + sum(p->rchild);
     }
 }
-void Inorder(Node *p)
+bool isSumTree(Node *p)
 {
-    if (p != NULL)
+    if (p == NULL || (p->lchild == NULL && p->rchild == NULL))
     {
-        Inorder(p->lchild);
-        cout << p->data << " ";
-        Inorder(p->rchild);
+        return true;
+    }
+    int ls = sum(p->lchild);
+    int rs = sum(p->rchild);
+
+    if ((p->data = ls + rs) && isSumTree(p->lchild) && isSumTree(p->rchild))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
-
-Node *leastCommonAncestor(Node *p, int x, int y){
-    if (p == NULL)
-    {
-        return NULL;
-    }
-    int a, b;
-    if (x < y)
-    {
-        a = x;
-        b = y;
-    }else
-    {
-        a = y;
-        b = x;
-    }
-    while (p)
-    {
-        if (p->data < b)
-        {
-            if (p->data >= a)
-            {
-                return p;
-            }
-            else
-            {
-                p = p->rchild;
-            }
-        }
-        else if(p->data == b){
-            return p;
-        }
-        else
-        {
-            p = p->lchild;
-        }
-    }
-    return NULL;
-}
-
 int main()
 {
-    Insert(10);
-    Insert(5);
-    Insert(20);
-    Insert(8);
-    Insert(30);
-    Insert(40);
-    Inorder(root);
+    create(root);
+    cout << "Preorder: ";
+    Preorder(root);
     cout << endl;
+    if(isSumTree(root)){
+        cout<<"Given Binary Tree is a Sum Tree"<<endl;
+    }
+    else{
+        cout<<"Given Binary Tree is not a Sum Tree"<<endl;
+    }
+
     return 0;
 }

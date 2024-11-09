@@ -1,6 +1,7 @@
-// Count Leaves
+// Count Leaf Nodes in a Tree
 #include <iostream>
 #include <queue>
+#include <stack>
 
 using namespace std;
 class Node
@@ -58,31 +59,42 @@ void Preorder(Node *p)
         Preorder(p->rchild);
     }
 }
-
-int size(Node *p)
+int leafCount(Node *p)
 {
-    if (p)
-        return size(p->lchild) + size(p->rchild) + 1;
-
-    return 0;
-}
-
-int countLeaves(Node *p){
-    if(p == NULL){
+    if (p == NULL)
+    {
         return 0;
     }
-    if(!p->lchild && !p->rchild){
+    else if (p->lchild == NULL && p->rchild == NULL)
+    {
         return 1;
     }
-    return countLeaves(p->lchild) + countLeaves(p->rchild);
+    else
+    {
+        return leafCount(p->lchild) + leafCount(p->rchild);
+    }
+}
+int height(Node *p)
+{
+    int x = 0, y = 0;
+    if (p == NULL)
+        return 0;
+
+    x = height(p->lchild);
+    y = height(p->rchild);
+    if (x > y)
+        return x + 1;
+    else
+        return y + 1;
 }
 
 int main()
 {
     create(root);
-    cout<<"Preorder: ";
+    cout << "Preorder: ";
     Preorder(root);
     cout << endl;
-    cout<<"Size of Tree: "<<size(root)<<endl;
-    cout<<"No of Leaves in Tree: "<<countLeaves(root)<<endl;
+    cout << "Height = " << height(root) << endl;
+    cout << "Leaf Nodes = " << leafCount(root) << endl;
+    return 0;
 }

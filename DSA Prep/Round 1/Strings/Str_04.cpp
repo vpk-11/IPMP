@@ -1,40 +1,35 @@
-// Revers Words of String
+// Reverse words of a string
+// First Non Repeating Character
 #include <iostream>
 #include <vector>
 #include <string>
 using namespace std;
+#define NO_OF_CHARS 256
 
-string reverseWords(string s)
+void printWordsInReverse(string str)
 {
-    vector<string> v;
-    string str;
-    for (int i = 0; i < s.size(); i++)
+    vector <string> words;
+    string s = "";
+    for (int i = 0; i < str.length(); i++)
     {
-        if (s[i] == ' ')
+        if (str[i] == ' ')
         {
-            v.push_back(str);
-            str = "";
-        }
-        else
-        {
-            str.push_back(s[i]);
+            words.push_back(s);
+            s = "";
+        } else{
+            s.push_back(str[i]);
         }
     }
-    v.push_back(str);
-    str = "";
-    for (int i = v.size() - 1; i >= 1; i--)
+    words.push_back(s);
+    for (int i = words.size(); i >= 0; i--)
     {
-        str += v[i];
-        str += " ";
+        cout<<words[i]<<" ";
     }
-    str += v[0];
-    return str;
+    cout<<endl;
 }
-
 int main()
 {
-    string s = "i like this program very much";
-    string str = reverseWords(s);
-    cout << str << endl;
+    string str = "hello from the other side!!!";
+    printWordsInReverse(str);
     return 0;
 }

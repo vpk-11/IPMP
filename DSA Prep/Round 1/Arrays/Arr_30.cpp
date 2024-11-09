@@ -1,55 +1,42 @@
-// Sort an Array of 0s, 1s and 2s
 #include <iostream>
 using namespace std;
 
-void sort0s1s2s(int arr[], int n)
+void swap(int *a, int *b)
 {
-    int z = 0;
-    int o = 0;
-    int t = 0;
-    for (int i = 0; i < n; i++)
-    {
-        if (arr[i] == 0)
-        {
-            z++;
-        }
-        else if (arr[i] == 1)
-        {
-            o++;
-        }
-        else if (arr[i] == 2)
-        {
-            t++;
-        }
-    }
-    int i = 0;
-    while (z > 0)
-    {
-        arr[i++] = 0;
-        z--;
-    }
-    while (o > 0)
-    {
-        arr[i++] = 1;
-        o--;
-    }
-    while (t > 0)
-    {
-        arr[i++] = 2;
-        t--;
-    }
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
-
-int main()
+void rearrange(int arr[], int n)
 {
-    int arr[] = {0, 1, 1, 0, 1, 2, 1, 2, 0, 0, 0, 1};
-    int n = sizeof(arr) / sizeof(int);
-
-    sort0s1s2s(arr, n);
+    int i = -1;
+    // utility code that pushes all the negative numbers to the front
+    for (int j = 0; j < n; j++)
+    {
+        if (arr[j] < 0)
+        {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    int pos_point = i + 1, neg_point = 0;
+    while (pos_point < n && neg_point < pos_point && arr[neg_point] < 0)
+    {
+        swap(&arr[neg_point], &arr[pos_point]);
+        pos_point++;
+        neg_point += 2; // every alternate negative number
+    }
     for (int i = 0; i < n; i++)
     {
         cout << arr[i] << " ";
     }
     cout << endl;
+}
+
+int main()
+{
+    int arr[] = {1, 2, -3, 4, 5, 6, -7, 8, 9};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    rearrange(arr, n);
     return 0;
 }

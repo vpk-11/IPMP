@@ -1,9 +1,10 @@
-// Vertical Sum of Tree
+// Vertical Sum
 #include <iostream>
 #include <queue>
-#include <algorithm>
-
+#include <stack>
+#include <map>
 using namespace std;
+
 class Node
 {
 public:
@@ -50,20 +51,42 @@ void create(Node *root)
     }
 }
 
-void Preorder(Node *p)
+void Rec_Preorder(Node *p)
 {
     if (p)
     {
         cout << p->data << " ";
-        Preorder(p->lchild);
-        Preorder(p->rchild);
+        Rec_Preorder(p->lchild);
+        Rec_Preorder(p->rchild);
     }
+}
+
+void verticalSumUtil(Node *node, int hd,
+                     map<int, int> &Map)
+{
+    if (node == NULL)
+        return;
+    verticalSumUtil(node->lchild, hd - 1, Map);
+    Map[hd] += node->data;
+    verticalSumUtil(node->rchild, hd + 1, Map);
+}
+
+void verticalSum(Node *root)
+{
+    map<int, int> Map;
+    map<int, int>::iterator it;
+    verticalSumUtil(root, 0, Map);
+    for (it = Map.begin(); it != Map.end(); ++it)
+        cout << it->first << ": " << it->second << endl;
 }
 
 int main()
 {
     create(root);
     cout << "Preorder: ";
-    Preorder(root);
+    Rec_Preorder(root);
     cout << endl;
+    verticalSum(root);
+
+    return 0;
 }

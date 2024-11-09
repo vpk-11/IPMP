@@ -1,7 +1,8 @@
-// Diameter of a Tree
+// Diameter of Tree
 #include <iostream>
-#include <queue>
 #include <algorithm>
+#include <queue>
+#include <stack>
 
 using namespace std;
 class Node
@@ -50,56 +51,59 @@ void create(Node *root)
     }
 }
 
-void Preorder(Node *p)
+void Rec_Preorder(Node *p)
 {
     if (p)
     {
         cout << p->data << " ";
-        Preorder(p->lchild);
-        Preorder(p->rchild);
+        Rec_Preorder(p->lchild);
+        Rec_Preorder(p->rchild);
     }
 }
 
-int size(Node *p)
+int count(Node *p)
 {
     if (p)
-        return size(p->lchild) + size(p->rchild) + 1;
+        return count(p->lchild) + count(p->rchild) + 1;
 
     return 0;
 }
 
 int height(Node *p)
 {
+    int x = 0, y = 0;
     if (p == NULL)
-    {
         return 0;
-    }
-    int x = height(p->lchild);
-    int y = height(p->rchild);
 
-    return max(x, y) + 1;
+    x = height(p->lchild);
+    y = height(p->rchild);
+    if (x > y)
+        return x + 1;
+    else
+        return y + 1;
 }
-
-int diameter(Node *p)
-{
-    if (p == NULL){
+int diameter(Node *p){
+    if(p==NULL)
         return 0;
-    }
-
+    
     int lheight = height(p->lchild);
     int rheight = height(p->rchild);
 
-    int ldiameter = diameter(p->lchild);
-    int rdiameter = diameter(p->rchild);
+    int lDia = diameter(p->lchild); 
+    int rDia = diameter(p->rchild); 
 
-    return max(lheight + rheight + 1, max(ldiameter, rdiameter));
+    return max(lheight + rheight + 1,
+            max(lDia, rDia));
 }
-
 int main()
 {
     create(root);
     cout << "Preorder: ";
-    Preorder(root);
+    Rec_Preorder(root);
     cout << endl;
-    cout << "Diameter of Tree: " << diameter(root) << endl;
+    cout << "No of Nodes: " << count(root) << endl;
+    cout << "Height = " << height(root) << endl;
+    cout << "Diameter = " << diameter(root) << endl;
+
+    return 0;
 }

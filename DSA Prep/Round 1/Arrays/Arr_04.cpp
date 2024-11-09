@@ -1,36 +1,38 @@
-// 2 Numbers occuring once
 #include <iostream>
+#include <algorithm>
+#include <unordered_map>
 #include <vector>
-#include <map>
+
 using namespace std;
 
-vector<int> numberWithOddOccur(int arr[], int n)
-{
-    vector<int> v;
-    map<int, int> hash;
+int main(){
+    
+    int arr[] = {15,12,31,49,15,12,31,56};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    //using unordered Map
+    unordered_map <int, int> map;
     for (int i = 0; i < n; i++)
+       map[arr[i]]++;
+    
+    for (int i = 0; i < map.size(); i++)
     {
-        hash[arr[i]]++;
-    }
-    for (auto it : hash)
-    {
-        if (it.second == 1)
+        if (map[arr[i]]==1)
         {
-            v.push_back(it.first);
+            cout<<arr[i]<<endl;
         }
     }
-    return v;
-}
-
-int main()
-{
-    int arr[] = {2, 3, 7, 9, 11, 2, 3, 11};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    vector<int> v = numberWithOddOccur(arr, n);
-    for (auto it : v)
+    // Using Sorting
+    sort(arr,arr+n);
+    int i = 0;
+    while (i < n)
     {
-        cout << it << " ";
+        if (arr[i]==arr[i+1])
+        {
+            i++;
+        }else{
+            cout<<arr[i]<<" ";
+        }
+        i++;
     }
-    cout << endl;
     return 0;
 }

@@ -1,11 +1,7 @@
-// kth Node value at Nth level
+// Min Value of BST
 #include <iostream>
-#include <queue>
-#include <vector>
-#include <algorithm>
-#include <climits>
-
 using namespace std;
+
 class Node
 {
 public:
@@ -13,107 +9,79 @@ public:
     Node *lchild;
     Node *rchild;
 };
-Node *root = new Node;
+Node *root = NULL;
 
-void create(Node *root)
+void Insert(int key)
 {
-    queue<Node *> q;
-    Node *p, *t;
-    int x;
-    cout << "Enter Root Value ";
-    cin >> x;
-    root->data = x;
-    root->lchild = root->rchild = NULL;
-    q.push(root);
-    while (!q.empty())
-    {
-        p = q.front();
-        q.pop();
-        printf("Enter Left Child of %d: ", p->data);
-        cin >> x;
-        if (x != -1)
-        {
-            t = new Node;
-            t->data = x;
-            t->lchild = t->rchild = NULL;
-            p->lchild = t;
-            q.push(t);
-        }
-        printf("Enter Right Child of %d: ", p->data);
-        cin >> x;
-        if (x != -1)
-        {
-            t = new Node;
-            t->data = x;
-            t->lchild = t->rchild = NULL;
-            p->rchild = t;
-            q.push(t);
-        }
-    }
-}
-
-void Preorder(Node *p)
-{
-    if (p)
-    {
-        cout << p->data << " ";
-        Preorder(p->lchild);
-        Preorder(p->rchild);
-    }
-}
-
-void KthNodeAtNthDistance(Node *root, int k, int n)
-{
+    Node *t = root;
+    Node *p, *r;
     if (root == NULL)
     {
+        p = new Node;
+        p->data = key;
+        p->lchild = p->rchild = NULL;
+        root = p;
         return;
     }
-    if (k == 0)
+    while (t != NULL)
     {
-        cout << root->data << " ";
-        return;
-    }
-    queue<Node *> q;
-    Node *p;
-    q.push(root);
-    int level = 0;
-    while (!q.empty())
-    {
-        int count = q.size();
-        level++;
-        for (int i = 0; i < count; i++)
+        r = t;
+        if (key < t->data)
         {
-            p = q.front();
-            q.pop();
-            if (i == k - 1 && level == n)
-            {
-                cout << p->data << " ";
-                return;
-            }
-            if (p->lchild)
-            {
-                q.push(p->lchild);
-            }
-            if (p->rchild)
-            {
-                q.push(p->rchild);
-            }
+            t = t->lchild;
+        }
+        else if (key > t->data)
+        {
+            t = t->rchild;
+        }
+        else
+        {
+            return;
         }
     }
+    p = new Node;
+    p->data = key;
+    p->lchild = p->rchild = NULL;
+    if (r->data > p->data)
+    {
+        r->lchild = p;
+    }
+    else
+    {
+        r->rchild = p;
+    }
 }
-
+void Inorder(Node *p)
+{
+    if (p != NULL)
+    {
+        Inorder(p->lchild);
+        cout << p->data << " ";
+        Inorder(p->rchild);
+    }
+}
+int MinValue(Node *p)
+{
+    if (p == NULL)
+    {
+        return -1;
+    }
+    while (p->lchild != NULL)
+    {
+        p = p->lchild;
+    }
+    return p->data;
+    
+}
 int main()
 {
-    create(root);
-    cout << "Preorder: ";
-    Preorder(root);
-    cout << endl;
-    int k;
-    cout << "K Distance is: ";
-    cin >> k;
-    int n;
-    cout << "Nth Level is: ";
-    cin >> n;
-    KthNodeAtNthDistance(root, k, n);
-    return 0;
+    int arr[] = {4, 2, 7, 3, 6, 0};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    for (int i = 0; i < n; i++)
+    {
+        Insert(arr[i]);
+    }
+    Inorder(root);
+    cout<<endl;
+    cout << "Min Value of BST is: " << MinValue(root) << endl;
 }

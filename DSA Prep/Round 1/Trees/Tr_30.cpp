@@ -1,7 +1,8 @@
-// Check if Sum Tree or Not
+// Balance
 #include <iostream>
 #include <queue>
-
+#include <stack>
+#include <algorithm>
 using namespace std;
 class Node
 {
@@ -59,29 +60,33 @@ void Preorder(Node *p)
     }
 }
 
-int sum(Node *p)
+int height(Node *p)
 {
+    int x = 0, y = 0;
     if (p == NULL)
         return 0;
 
-    return sum(p->lchild) + p->data +
-           sum(p->rchild);
+    x = height(p->lchild);
+    y = height(p->rchild);
+    if (x > y)
+        return x + 1;
+    else
+        return y + 1;
 }
-
-int isSumTree(struct Node *p)
+bool isBalanced(Node *p)
 {
-    int ls, rs;
-    if (p == NULL || (p->lchild == NULL && p->rchild == NULL))
+    if (p == NULL)
     {
-        return 1;
+        return true;
     }
-    ls = sum(p->lchild);
-    rs = sum(p->rchild);
-    if ((p->data == ls + rs) && isSumTree(p->lchild) && isSumTree(p->rchild))
+    int lh = height(p->lchild);
+    int rh = height(p->rchild);
+
+    if ((abs(lh - rh) <= 1) && (isBalanced(p->lchild) && isBalanced(p->rchild)))
     {
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 int main()
@@ -90,13 +95,15 @@ int main()
     cout << "Preorder: ";
     Preorder(root);
     cout << endl;
-    if (isSumTree(root))
+    cout << "Height = " << height(root) << endl;
+    if (isBalanced(root))
     {
-        cout << "Suiiii" << endl;
+        cout << "Tree is Balanced" << endl;
     }
     else
     {
-        cout << "Die Stargen" << endl;
+        cout << "Tree is Not Balanced" << endl;
     }
+
     return 0;
 }

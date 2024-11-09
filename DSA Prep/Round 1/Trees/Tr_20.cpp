@@ -1,9 +1,7 @@
-// Print Nodes at a distance of K from root
+// Print Nodes at distance K
 #include <iostream>
 #include <queue>
-#include <vector>
-#include <algorithm>
-#include <climits>
+#include <stack>
 
 using namespace std;
 class Node
@@ -62,48 +60,17 @@ void Preorder(Node *p)
     }
 }
 
-void printKDistantNodes(Node *root, int k)
+void printNodesAtLevelK(Node *p, int k)
 {
-    if (root == NULL)
+    if (p == NULL || k < 0)
+        return;
+    if (k == 0)
     {
+        cout << p->data << " ";
         return;
     }
-    if(k == 0){
-        cout << root->data << " ";
-        return;
-    }
-    queue<Node *> q;
-    Node *p;
-    q.push(root);
-    int level = 0;
-    while (!q.empty())
-    {
-        int count = q.size();
-        level++;
-        while (count > 0)
-        {
-            p = q.front();
-            q.pop();
-            if (p->lchild)
-            {
-                if (level == k)
-                {
-                    cout << p->lchild->data << " ";
-                }
-                
-                q.push(p->lchild);
-            }
-            if (p->rchild)
-            {
-                if (level == k)
-                {
-                    cout << p->rchild->data << " ";
-                }
-                q.push(p->rchild);
-            }
-            count--;
-        }
-    }
+    printNodesAtLevelK(p->lchild, k - 1);
+    printNodesAtLevelK(p->rchild, k - 1);
 }
 
 int main()
@@ -113,8 +80,7 @@ int main()
     Preorder(root);
     cout << endl;
     int k;
-    cout << "K Distance is: ";
-    cin >> k;
-    printKDistantNodes(root, k);
+    cin>>k;
+    printNodesAtLevelK(root, k);
     return 0;
 }

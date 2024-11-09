@@ -1,42 +1,52 @@
-// Min elem in sorted and rotated array
+// Cpp code for Min Point in array
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
-int minSearch(int arr[], int n)
+int BinarySearch(int arr[], int left, int right)
 {
-    int start = 0, end = n - 1;
-
-    if (arr[start] <= arr[end])
-        return start;
-
-    while (start <= end)
+    if (right >= left)
     {
-        int mid = (start + end) / 2;
-
-        if (arr[mid] < arr[mid - 1])
+        int mid = (left + right) / 2;
+        if (arr[mid] <= arr[mid-1] && arr[mid] <= arr[mid+1])
             return mid;
-
-        else if (arr[mid] > arr[mid + 1])
-            return mid + 1;
-
-        else if (arr[start] <= arr[mid])
-            start = mid + 1;
-
-        else if (arr[mid] <= arr[end])
-            end = mid - 1;
+        if (arr[mid] <= arr[mid-1] && arr[mid] >= arr[mid+1])
+        {
+            return BinarySearch(arr, (mid + 1), right);
+        }
+        if (arr[mid] >= arr[mid-1] && arr[mid] <= arr[mid+1])
+        {
+            return BinarySearch(arr, left, (mid - 1));
+        }
     }
     return -1;
 }
 
+int MinPoint(int arr[], int n)
+{
+    //Linear Search method
+    int min = arr[0];
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        if (arr[i] < min)
+            min = arr[i];
+        if(arr[i] < arr[i+1])
+            break;
+    }
+    return i;
+}
+
 int main()
 {
-    int arr[] = {335, 359, 383, 392, 422, 437, 448, 465, 468, 479, 492, 501, 539, 605, 668, 704, 706, 717, 719, 725, 727,
-                 772, 812, 828, 870, 895, 896, 903, 913, 943, 962, 963, 996, 36, 146, 154, 170, 282, 293, 300, 323, 334};
+    int arr[] = {4, 3, 2, 1, 2, 3, 4};
+    int index;
     int n = sizeof(arr) / sizeof(arr[0]);
-    int index = minSearch(arr, n);
-    if (index != -1)
-    {
-        cout << "Min Elem is: " << arr[index] << endl;
-    }
-    return 0;
+    cout << "Linear Search" << endl;
+    index = MinPoint(arr,n);
+    cout << "Min point is " << arr[index] << " at index " << index << endl;
+
+    cout << "Binary Search" << endl;
+    index = BinarySearch(arr,0,n-1);
+    cout << "Min point is " << arr[index] << " at index " << index << endl;
 }

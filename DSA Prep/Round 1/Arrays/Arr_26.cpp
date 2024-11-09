@@ -1,7 +1,5 @@
-// Shuffle Given Array
+// Segr even and odd
 #include <iostream>
-#include <stdlib.h>
-#include <time.h>
 using namespace std;
 
 void swap(int *a, int *b)
@@ -11,28 +9,37 @@ void swap(int *a, int *b)
     *b = temp;
 }
 
-void randomize(int arr[], int n)
+void segEvenOdd(int arr[], int n)
 {
-    srand(time(NULL));
-    for (int i = n - 1; i > 0; i--)
+    int left = 0, right = n - 1;
+    while (left < right)
     {
-        int j = rand() % (i + 1);
-        swap(&arr[i], &arr[j]);
+        while (arr[left] % 2 == 0 && left < right)
+            left++;
+        
+        while (arr[right] % 2 == 1 && left < right)
+            right--;
+        
+        if (left < right)
+        {
+            swap(&arr[left], &arr[right]);
+            left++; right--;
+        }
     }
-}
-
-void printArray(int arr[], int n)
-{
     for (int i = 0; i < n; i++)
+    {
         cout << arr[i] << " ";
-    cout << "\n";
+    }
 }
 
 int main()
 {
-    int arr[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    int arr[] = {10, 21, 20, 11, 30, 40, 31, 41};
     int n = sizeof(arr) / sizeof(arr[0]);
-    randomize(arr, n);
-    printArray(arr, n);
-    return 0;
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+    segEvenOdd(arr, n);
 }

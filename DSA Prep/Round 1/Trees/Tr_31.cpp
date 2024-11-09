@@ -1,7 +1,8 @@
-// Check if BST or Not
+// Complete Binary Tree
 #include <iostream>
 #include <queue>
-
+#include <stack>
+#include <algorithm>
 using namespace std;
 class Node
 {
@@ -59,21 +60,51 @@ void Preorder(Node *p)
     }
 }
 
-bool isBST(struct Node *p)
+int height(Node *p)
 {
+    int x = 0, y = 0;
     if (p == NULL)
-        return true;
-
-    if (p->lchild != NULL && p->lchild->data > p->data)
-        return false;
-
-    if (p->rchild != NULL && p->rchild->data < p->data)
         return 0;
 
-    if (!isBST(p->lchild) || !isBST(p->rchild))
-        return 0;
-
-    return 1;
+    x = height(p->lchild);
+    y = height(p->rchild);
+    if (x > y)
+        return x + 1;
+    else
+        return y + 1;
+}
+bool isComplete(Node *p)
+{
+    queue<Node *> q;
+    //cout << p->data << " ";
+    q.push(p);
+    bool flag = true;
+    while (!q.empty())
+    {
+        p = q.front();
+        q.pop();
+        if (p->lchild)
+        {
+            //cout << p->lchild->data << " ";
+            if(flag == false){
+                return false;
+            }
+            q.push(p->lchild);
+        } else{
+            flag = false;
+        }
+        if (p->rchild)
+        {
+            if(flag == false){
+                return false;
+            }
+            //cout << p->rchild->data << " ";
+            q.push(p->rchild);
+        } else{
+            flag = false;
+        }
+    }
+    return true;
 }
 
 int main()
@@ -82,13 +113,15 @@ int main()
     cout << "Preorder: ";
     Preorder(root);
     cout << endl;
-    if (isBST(root))
+    cout << "Height = " << height(root) << endl;
+    if (isComplete(root))
     {
-        cout << "Suiiii" << endl;
+        cout << "Tree is a Complete Binary Tree" << endl;
     }
     else
     {
-        cout << "Die Stargen" << endl;
+        cout << "Tree is not a Complete Binary Tree" << endl;
     }
+
     return 0;
 }

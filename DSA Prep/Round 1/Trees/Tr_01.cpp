@@ -1,6 +1,7 @@
 // Size of Tree
 #include <iostream>
 #include <queue>
+#include <stack>
 
 using namespace std;
 class Node
@@ -59,10 +60,10 @@ void Preorder(Node *p)
     }
 }
 
-int size(Node *p)
+int count(Node *p)
 {
     if (p)
-        return size(p->lchild) + size(p->rchild) + 1;
+        return count(p->lchild) + count(p->rchild) + 1;
 
     return 0;
 }
@@ -70,8 +71,10 @@ int size(Node *p)
 int main()
 {
     create(root);
-    cout<<"Preorder: ";
+    cout << "Preorder: ";
     Preorder(root);
     cout << endl;
-    cout<<"Size of Tree: "<<size(root)<<endl;
+    cout << "No of Nodes: " << count(root) << endl;
+
+    return 0;
 }

@@ -2,8 +2,6 @@
 #include <iostream>
 #include <queue>
 #include <stack>
-#include <algorithm>
-#include <vector>
 
 using namespace std;
 class Node
@@ -74,32 +72,6 @@ void LevelOrder(Node *p)
     }
 }
 
-void revLevelOrder(Node *p)
-{
-    queue<Node *> q;
-    stack<Node *> s;
-    q.push(p);
-    while (!q.empty())
-    {
-        p = q.front();
-        q.pop();
-        s.push(p);
-        if (p->rchild)
-        {
-            q.push(p->rchild);
-        }
-        if (p->lchild)
-        {
-            q.push(p->lchild);
-        }
-    }
-    while (!s.empty())
-    {
-        cout << s.top()->data << " ";
-        s.pop();
-    }
-}
-
 void Rec_Preorder(Node *p)
 {
     if (p)
@@ -109,18 +81,50 @@ void Rec_Preorder(Node *p)
         Rec_Preorder(p->rchild);
     }
 }
+void printLevel(Node *p, int level)
+{
+    if (p == NULL)
+        return;
+    if (level == 1)
+        cout << p->data << " ";
+    else
+    {
+        printLevel(p->lchild, level - 1);
+        printLevel(p->rchild, level - 1);
+    }
+}
+
+int height(Node *p)
+{
+    int x = 0, y = 0;
+    if (p == NULL)
+        return 0;
+
+    x = height(p->lchild);
+    y = height(p->rchild);
+    if (x > y)
+        return x + 1;
+    else
+        return y + 1;
+}
+
+void Rev_LevelOrder(Node *p)
+{
+    for (int i = height(root); i > 0; i--)
+        printLevel(p, i);
+}
 
 int main()
 {
     create(root);
     cout << "Preorder: ";
     Rec_Preorder(root);
-    cout << endl;
-    cout << "Level Order: ";
+    cout << endl
+         << "Level Order: ";
     LevelOrder(root);
-    cout << endl;
-    cout << "Reverse Level Order: ";
-    revLevelOrder(root);
+    cout << endl
+         << "Reverse Level Order: ";
+    Rev_LevelOrder(root);
     cout << endl;
 
     return 0;

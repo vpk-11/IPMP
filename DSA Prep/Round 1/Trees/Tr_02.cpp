@@ -1,7 +1,7 @@
-// Height of a Tree
+// Depth of Tree
 #include <iostream>
 #include <queue>
-#include <algorithm>
+#include <stack>
 
 using namespace std;
 class Node
@@ -50,39 +50,37 @@ void create(Node *root)
     }
 }
 
-void Preorder(Node *p)
+void Rec_Preorder(Node *p)
 {
     if (p)
     {
         cout << p->data << " ";
-        Preorder(p->lchild);
-        Preorder(p->rchild);
+        Rec_Preorder(p->lchild);
+        Rec_Preorder(p->rchild);
     }
 }
 
-int size(Node *p)
+int height(Node *p)
 {
-    if (p)
-        return size(p->lchild) + size(p->rchild) + 1;
-
-    return 0;
-}
-
-int height(Node *p){
-    if(p == NULL){
+    int x = 0, y = 0;
+    if (p == NULL)
         return 0;
-    }
-    int x = height(p->lchild);
-    int y = height(p->rchild);
 
-    return max(x,y) + 1;
+    x = height(p->lchild);
+    y = height(p->rchild);
+    if (x > y)
+        return x + 1;
+    else
+        return y + 1;
 }
 
 int main()
 {
     create(root);
-    cout<<"Preorder: ";
-    Preorder(root);
+    cout << "Preorder: ";
+    Rec_Preorder(root);
     cout << endl;
-    cout<<"Height of Tree: "<<height(root)<<endl;
+    cout << "Height = " << height(root) << endl;
+
+    return 0;
 }

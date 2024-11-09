@@ -1,9 +1,7 @@
-// Spiral Level Order Traversal
+// Level Order Traversal in Spiral Form
 #include <iostream>
 #include <queue>
 #include <stack>
-#include <algorithm>
-#include <vector>
 
 using namespace std;
 class Node
@@ -52,74 +50,66 @@ void create(Node *root)
     }
 }
 
-void LevelOrder(Node *p)
+void printLevel(Node *p, int level, bool flag)
 {
-    queue<Node *> q;
-    cout << p->data << " ";
-    q.push(p);
-    while (!q.empty())
+    if (p == NULL)
+        return;
+    if (level == 1)
+        cout << p->data << " ";
+         
+    else if (level > 1)
     {
-        p = q.front();
-        q.pop();
-        if (p->lchild)
+        if (flag)
         {
-            cout << p->lchild->data << " ";
-            q.push(p->lchild);
+            printLevel(p->lchild,
+                            level - 1, flag);
+            printLevel(p->rchild,
+                            level - 1, flag);
         }
-        if (p->rchild)
+        else
         {
-            cout << p->rchild->data << " ";
-            q.push(p->rchild);
+            printLevel(p->rchild,
+                            level - 1, flag);
+            printLevel(p->lchild,
+                            level - 1, flag);
         }
     }
 }
 
-void spiralLevelOrder(Node *p)
+int height(Node *p)
 {
-    stack<Node *> s1, s2;
-    s1.push(p);
+    int x = 0, y = 0;
+    if (p == NULL)
+        return 0;
 
-    while (!s1.empty() || !s2.empty())
+    x = height(p->lchild);
+    y = height(p->rchild);
+    if (x > y)
+        return x + 1;
+    else
+        return y + 1;
+}
+
+void Rec_LevelOrder(Node *p)
+{
+    int h = height(root);
+    int i;
+ 
+    bool flag = false;
+    for(i = 1; i <= h; i++)
     {
-        while (!s1.empty())
-        {
-            p = s1.top();
-            s1.pop();
-            cout << p->data << " ";
-            if (p->rchild)
-            {
-                s2.push(p->rchild);
-            }
-
-            if (p->lchild)
-            {
-                s2.push(p->lchild);
-            }
-        }
-        while (!s2.empty())
-        {
-            p = s2.top();
-            s2.pop();
-            cout << p->data << " ";
-            if (p->lchild)
-            {
-                s1.push(p->lchild);
-            }
-            if (p->rchild)
-            {
-                s1.push(p->rchild);
-            }
-        }
+        printLevel(p, i, flag);
+        flag = !flag;
     }
 }
 
-void Rec_Preorder(Node *p)
+void Preorder(Node *p)
 {
     if (p)
     {
         cout << p->data << " ";
-        Rec_Preorder(p->lchild);
-        Rec_Preorder(p->rchild);
+        Preorder(p->lchild);
+        Preorder(p->rchild);
     }
 }
 
@@ -127,13 +117,10 @@ int main()
 {
     create(root);
     cout << "Preorder: ";
-    Rec_Preorder(root);
-    cout << endl;
-    cout << "Level Order: ";
-    LevelOrder(root);
-    cout << endl;
-    cout << "Spiral Level Order: ";
-    spiralLevelOrder(root);
+    Preorder(root);
+    cout << endl
+         << "Level Order: ";
+    Rec_LevelOrder(root);
     cout << endl;
 
     return 0;

@@ -2,8 +2,6 @@
 #include <iostream>
 #include <queue>
 #include <stack>
-#include <algorithm>
-#include <vector>
 
 using namespace std;
 class Node
@@ -91,43 +89,6 @@ void Inorder(Node *p)
     }
 }
 
-void PostOrder(Node *root)
-{
-    vector<int> ans;
-    while (root != NULL)
-    {
-        if (root->rchild == NULL)
-        {
-            ans.push_back(root->data);
-            root = root->lchild;
-        }
-        else
-        {
-            Node *prev = root->rchild;
-            while (prev->lchild != NULL && prev->lchild != root)
-            {
-                prev = prev->lchild;
-            }
-            if (prev->lchild == NULL)
-            {
-                prev->lchild = root;
-                ans.push_back(root->data);
-                root = root->rchild;
-            }
-            else
-            {
-                prev->lchild = NULL;
-                root = root->lchild;
-            }
-        }
-    }
-    reverse(ans.begin(), ans.end());
-    for (auto it : ans)
-    {
-        cout << it << " ";
-    }
-}
-
 void LevelOrder(Node *p)
 {
     queue<Node *> q;
@@ -178,6 +139,28 @@ void Rec_Postorder(Node *p)
     }
 }
 
+int count(Node *p)
+{
+    if (p)
+        return count(p->lchild) + count(p->rchild) + 1;
+
+    return 0;
+}
+
+int height(Node *p)
+{
+    int x = 0, y = 0;
+    if (p == NULL)
+        return 0;
+
+    x = height(p->lchild);
+    y = height(p->rchild);
+    if (x > y)
+        return x + 1;
+    else
+        return y + 1;
+}
+
 int main()
 {
     create(root);
@@ -197,6 +180,8 @@ int main()
     cout << "Level Order: ";
     LevelOrder(root);
     cout << endl;
+    cout << "No of Nodes: " << count(root) << endl;
+    cout << "Height = " << height(root) << endl;
 
     return 0;
 }

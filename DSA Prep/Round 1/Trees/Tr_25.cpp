@@ -1,14 +1,17 @@
-// Node with Min Value in BST
+// Inorder successor in BST
 #include <iostream>
-using namespace std;
+#include <queue>
+#include <stack>
 
-struct Node
+using namespace std;
+class Node
 {
+public:
     int data;
     Node *lchild;
     Node *rchild;
 };
-Node *root = NULL;
+Node *root = new Node;
 
 void Insert(int key)
 {
@@ -50,6 +53,7 @@ void Insert(int key)
         r->rchild = p;
     }
 }
+
 void Inorder(Node *p)
 {
     if (p != NULL)
@@ -60,46 +64,67 @@ void Inorder(Node *p)
     }
 }
 
-Node *Search(int key)
+void Preorder(Node *p)
 {
-    Node *t = root;
-    while (t != NULL)
+    if (p)
     {
-        if (key == t->data)
+        cout << p->data << " ";
+        Preorder(p->lchild);
+        Preorder(p->rchild);
+    }
+}
+Node *MinValue(Node *p)
+{
+    Node* current = p;
+ 
+    while (current->lchild != NULL)
+    {
+        current = current->lchild;
+    }
+    return current;
+}
+Node *InorderSuccessor(Node *p, Node *temp)
+{
+    if(p == NULL || temp == NULL){
+        return NULL;
+    }
+    if (temp->rchild != NULL)
+        return MinValue(temp->rchild);
+
+    Node *succ = NULL;
+
+    while (p != NULL)
+    {
+        if (temp->data < p->data)
         {
-            return t;
+            succ = p;
+            p = p->lchild;
         }
-        else if (key < t->data)
+        else if (temp->data > p->data)
         {
-            t = t->lchild;
+            p = p->rchild;
         }
         else
         {
-            t = t->rchild;
+            break;
         }
     }
-    return NULL;
+    return succ;
 }
-
-Node *minValue()
-{
-    Node *t = root;
-    while (t->lchild)
-    {
-        t = t->lchild;
-    }
-    return t;
-}
-
 int main()
 {
-    Insert(10);
-    Insert(5);
-    Insert(20);
-    Insert(8);
-    Insert(30);
+    int arr[] = {50, 30, 70, 20, 60, 40, 80};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    for (int i = 0; i < n; i++)
+    {
+        Insert(arr[i]);
+    }
+    cout << "Inorder: ";
     Inorder(root);
     cout << endl;
-    cout << "Min Value in tree is: " << minValue()->data << endl;
+    Node *temp = root->lchild->lchild;
+    Node *succ = InorderSuccessor(root, temp);
+    cout<<"Inorder Successor of "<<temp->data<<" is "<<succ->data;
+
     return 0;
 }

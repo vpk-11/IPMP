@@ -1,37 +1,31 @@
-// Check Anagram
+// Anagram
 #include <iostream>
-#include <string>
 #include <vector>
-#include <algorithm>
-#include <map>
+#include <string>
 using namespace std;
+#define NO_OF_CHARS 256
 
-vector<int> countArray(string s)
+vector<int> getCharCountArray(string str)
 {
-    vector<int> v(256);
-    for (int i = 0; i < 256; i++)
+    vector<int> count(NO_OF_CHARS);
+    for (int i = 0; i < str.length(); i++)
     {
-        v[i] = 0;
+        count[str[i]]++;
     }
-    for (int i = 0; i < s.size(); i++)
-    {
-        v[s[i]]++;
-    }
-    return v;
+    return count;
 }
 
-bool checkAnagram(string s1, string s2)
+bool isAnagram(string str1, string str2)
 {
-    if (s1.length() != s2.length())
+    if (str1.length() != str2.length())
     {
         return false;
     }
-    vector<int> v1, v2;
-    v1 = countArray(s1);
-    v2 = countArray(s2);
-    for (int i = 0; i < 256; i++)
+    vector<int> count1 = getCharCountArray(str1);
+    vector<int> count2 = getCharCountArray(str2);
+    for (int i = 0; i < NO_OF_CHARS; i++)
     {
-        if (v1[i] != v2[i])
+        if (count1[i] != count2[i])
         {
             return false;
         }
@@ -39,30 +33,16 @@ bool checkAnagram(string s1, string s2)
     return true;
 }
 
-bool checkAnagramAlt(string s1, string s2)
-{
-    if (s1.length() != s2.length())
-    {
-        return false;
-    }
-    sort(s1.begin(), s1.end());
-    sort(s2.begin(), s2.end());
-    if (s1 != s2)
-    {
-        return false;
-    }
-    return true;
-}
-
 int main()
 {
-    string str1 = "test";
-    string str2 = "ttes";
-
-    if (checkAnagram(str1, str2))
-        cout << "The two strings are anagram of each other" << endl;
-    else
-        cout << "The two strings are not anagram of each other" << endl;
-
+    string str1 = "tweet";
+    string str2 = "test";
+    if (isAnagram(str1, str2))
+    {
+        cout<<"Yaas!!"<<endl;
+    } else{
+        cout<<"No...."<<endl;
+    }
+    
     return 0;
 }

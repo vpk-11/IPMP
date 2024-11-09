@@ -1,19 +1,17 @@
 // Print Reverse of String using recursion
 #include <iostream>
-#include <string>
 using namespace std;
-
-void printReverse(string s, int i, int n){
-    if(i >= n){
+void printRevString(string str, int i){
+    if (i > str.size())
+    {
         return;
     }
-    printReverse(s, i + 1, n);
-    cout << s[i] << " ";
+    printRevString(str, i+1);
+    cout<<str[i];
+    
 }
-
 int main(){
-    string s = "abcdefg";
-    printReverse(s, 0, s.length());
-    cout << endl;
-    return 0;
+    string str = "Hello World";
+    printRevString(str, 0);
+    cout<<endl;
 }

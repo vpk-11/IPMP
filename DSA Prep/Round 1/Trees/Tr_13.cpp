@@ -1,8 +1,7 @@
-// Difference between sums of odd level and even level nodes of a Binary Tree
+// Diff between Even & Odd Level sums
 #include <iostream>
 #include <queue>
-#include <vector>
-#include <algorithm>
+#include <stack>
 
 using namespace std;
 class Node
@@ -28,7 +27,7 @@ void create(Node *root)
     {
         p = q.front();
         q.pop();
-        printf("Enter Left Child of %d: ", p->data);
+        printf("Enter lchild Child of %d: ", p->data);
         cin >> x;
         if (x != -1)
         {
@@ -38,7 +37,7 @@ void create(Node *root)
             p->lchild = t;
             q.push(t);
         }
-        printf("Enter Right Child of %d: ", p->data);
+        printf("Enter rchild Child of %d: ", p->data);
         cin >> x;
         if (x != -1)
         {
@@ -61,54 +60,47 @@ void Preorder(Node *p)
     }
 }
 
-int diffBtwSumsOfOddEvenLevels(Node *root)
+int count(Node *p)
 {
-    if(root == NULL){
-        return 0;
-    }
+    if (p)
+        return count(p->lchild) + count(p->rchild) + 1;
+
+    return 0;
+}
+
+void DiffLevelSuperSum(Node *p)
+{
     queue<Node *> q;
-    Node *p;
-    q.push(root);
-    vector<int> sums;
-    int result = 0;
+    q.push(p);
+    int level = 0;
+    int evenSum = 0, oddSum = 0;
     while (!q.empty())
     {
-        int count = q.size();
-        int sum = 0;
-        result = max(count, result);
-        while (count > 0)
+        int size = q.size();
+        level += 1;
+
+        while(size > 0)
         {
             p = q.front();
             q.pop();
+ 
+            if(level % 2 == 0)
+                evenSum += p->data;
+            else
+                oddSum += p->data;
+         
             if (p->lchild)
             {
                 q.push(p->lchild);
-                sum += p->lchild->data;
             }
             if (p->rchild)
             {
                 q.push(p->rchild);
-                sum += p->rchild->data;
             }
-            count--;
-        }
-        sums.push_back(sum);
-    }
-    result = root->data;
-    
-    for (int i = 0; i < sums.size(); i++)
-    {
-        cout << sums[i] << " ";
-        if (i % 2 == 0)
-        {
-            result -= sums[i]; 
-        }
-        else{
-            result += sums[i];
+            size -= 1;
         }
     }
-    cout << endl;
-    return result;
+    cout<<endl<<"Diff Sum = "<<evenSum - oddSum<<endl;
 }
 
 int main()
@@ -117,6 +109,8 @@ int main()
     cout << "Preorder: ";
     Preorder(root);
     cout << endl;
-    int ans = diffBtwSumsOfOddEvenLevels(root);
-    cout << "Difference between sums of odd levels and even levels " << ans << endl;
+    DiffLevelSuperSum(root);
+    cout << endl;
+
+    return 0;
 }

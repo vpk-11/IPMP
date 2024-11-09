@@ -1,55 +1,49 @@
-// Segregate Even and Odd
+// Sort 0s 1s 2s
 #include <iostream>
-#include <algorithm>
-#include <vector>
 using namespace std;
 
-void segregateEvenAndOdd(int arr[], int n)
+void swap(int *a, int *b)
 {
-    // Unstable Segregation
-    /*
-    int l = 0, r = n - 1;
-    while (l <= r)
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void sort012(int arr[], int n)
+{
+    int low = 0;
+    int high = n - 1;
+    int mid = 0;
+
+    while (mid <= high)
     {
-        while (arr[l] % 2 == 0 && l < r)
+        switch (arr[mid])
         {
-            l++;
-        }
-        while (arr[r] % 2 == 1 && l < r)
-        {
-            r--;
-        }
-        if (l < r)
-        {
-            swap(arr[l], arr[r]);
-            l++;
-            r--;
+        case 0:
+            swap(&arr[low], &arr[mid]); 
+            low++; mid++;
+            break;
+
+        case 1:
+            mid++;
+            break;
+
+        case 2:
+            swap(&arr[mid], &arr[high]); 
+            high--;
+            break;
         }
     }
-    */
-    // Stable Seggregation
-    int j = -1;
     for (int i = 0; i < n; i++)
     {
-        if (arr[i] % 2 == 0)
-        {
-            j++;
-            swap(arr[i], arr[j]);
-        }
+        cout << arr[i] << " ";
     }
+    cout << endl;
 }
 
 int main()
 {
-    int arr[] = {9,8,7,6,5,4,3,2,1};
+    int arr[] = {0, 1, 2, 0, 0, 1, 1, 2, 2};
     int n = sizeof(arr) / sizeof(arr[0]);
-    int i = 0;
-
-    segregateEvenAndOdd(arr, n);
-
-    cout << "Array after segregation ";
-    for (i = 0; i < n; i++)
-        cout << arr[i] << " ";
-    cout << endl;
-    return 0;
+    sort012(arr,n);
 }

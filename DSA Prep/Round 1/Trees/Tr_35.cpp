@@ -1,9 +1,8 @@
-// Convert Tree into its mirror tree
+// Children Sum Property
 #include <iostream>
 #include <queue>
 #include <stack>
-#include <algorithm>
-#include <vector>
+#include <ctype.h>
 
 using namespace std;
 class Node
@@ -61,19 +60,32 @@ void Preorder(Node *p)
         Preorder(p->rchild);
     }
 }
-
-void mirror(Node *p)
+bool isSumProp(Node *p)
 {
-    if (p == NULL)
-        return;
+    if (p == NULL || p->lchild == NULL && p->rchild == NULL)
+    {
+        return true;
+    }
     else
     {
-        Node *temp;
-        mirror(p->lchild);
-        mirror(p->rchild);
-        temp = p->lchild;
-        p->lchild = p->rchild;
-        p->rchild = temp;
+        int sum = 0;
+        if (p->lchild != NULL)
+        {
+            sum += p->lchild->data;
+        }
+        if (p->rchild != NULL)
+        {
+            sum += p->rchild->data;
+        }
+
+        if ((p->data == sum) && isSumProp(p->lchild) && isSumProp(p->rchild))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 
@@ -83,9 +95,13 @@ int main()
     cout << "Preorder: ";
     Preorder(root);
     cout << endl;
-    cout << "After Mirroring" << endl;
-    mirror(root);
-    cout << "Preorder: ";
-    Preorder(root);
-    cout << endl;
+    if (isSumProp(root))
+    {
+        cout << "Yes" << endl;
+    }
+    else
+    {
+        cout << "No" << endl;
+    }
+    return 0;
 }

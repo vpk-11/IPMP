@@ -1,46 +1,33 @@
-// Implement atoi function
+// Atoi Function
 #include <iostream>
+#include <string>
 using namespace std;
 
-long long atoi(string str)
+int ATOI(string str)
 {
-    int i;
-    if (str[0] == '-')
-        i = 1;
-    else
-        i = 0;
-
-    while (i < str.length())
-    {
-        if (str[i] - '0' < 0 || str[i] - '0' > 9)
-            return -1;
-        i++;
-    }
-
+    int ans = 0;
+    int sign = 1, i = 0;
     if (str[0] == '-')
     {
+        sign = -1;
         i = 1;
     }
-    else
-        i = 0;
 
-    long long res = 0;
-
-    while (i < str.length())
+    while ( i < str.length() && str[i] >= '0' && str[i] <= '9')
     {
-        res = res * 10 + (str[i] - '0');
+        if (str[i] == ' ')
+        {
+            continue;
+        }
+        ans *= 10;
+        ans += str[i] - '0';
         i++;
     }
-
-    if (str[0] == '-')
-        res = -res;
-    return res;
+    return sign * ans;
 }
 
 int main()
 {
-    string str = "89789";
-    long long val = atoi(str);
-    cout << val << endl;
-    return 0;
+    string str = "-12345";
+    cout << "After Atoi it is : " << ATOI(str) << endl;
 }

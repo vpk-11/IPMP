@@ -1,48 +1,62 @@
-// Four Numbers that give the sum
 #include <iostream>
-#include <vector>
-#include <unordered_map>
-#include <algorithm>
-#include <utility>
+using namespace std;
+#include <iostream>
 using namespace std;
 
-void fourSum(int arr[], int n, int X)
+void quadSum(int arr[], int n, int sum)
 {
-    unordered_map<int, pair<int, int> > hash;
-    for (int i = 0; i < n - 1; i++)
+    bool flag = false;
+    for (int i = 0; i < n; i++)
     {
-        for (int j = i + 1; j < n; j++)
+        for (int j = 0; j < n; j++)
         {
-            pair<int, int> p;
-            p.first = i;
-            p.second = j;
-            hash[arr[i] + arr[j]] = p;
-        }
-    }
-    for (int i = 0; i < n - 1; i++)
-    {
-        for (int j = i + 1; j < n; j++)
-        {
-            int sum = arr[i] + arr[j];
-            if (hash.find(X - sum) != hash.end())
+            for (int k = 0; k < n; k++)
             {
-                pair<int, int> p = hash[X - sum];
-                if (p.first != i && p.first != j && p.second != i && p.second != j)
+                for (int l = 0; l < n; l++)
                 {
-                    cout << arr[i] << ", " << arr[j] << ", " << arr[p.first] << ", " << arr[p.second] << endl;
-                    return;
+                    if (((arr[i] + arr[j] + arr[k] + arr[l]) == sum) && (i != j) && (k != j) && (i != k) && (l != j) && (k != l) && (i != l))
+                    {
+                        cout << "Sum of " << arr[i] << ", " << arr[j] << ", " << arr[k] << " & " << arr[l] << " is = " << sum << endl;
+                        cout << "Valid Quad exists" << endl;
+                        flag = true;
+                        break;
+                    }
+                    if (flag)
+                    {
+                        break;
+                    }
+                }
+                if (flag)
+                {
+                    break;
                 }
             }
+            if (flag)
+            {
+                break;
+            }
         }
+        if (flag)
+        {
+            break;
+        }
+    }
+    if (!flag)
+    {
+        cout << "No Valid Quad exists" << endl;
     }
 }
 
 int main()
 {
-    int arr[] = {12, 3, 4, 1, 6, 9, 20};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    int sum = 25;
-
-    fourSum(arr, n, sum);
-    return 0;
+    int n;
+    cin >> n;
+    int arr[n];
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
+    int sum;
+    cin >> sum;
+    quadSum(arr, n, sum);
 }

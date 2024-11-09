@@ -1,63 +1,49 @@
-// Sum Triplet
 #include <iostream>
-#include <vector>
-#include <cmath>
-#include <algorithm>
 using namespace std;
 
 void tripletSum(int arr[], int n, int sum)
 {
-    vector<int> v;
-    // Brute Force Method
-    // for (int i = 0; i < n; i++)
-    // {
-    //     for (int j = i + 1; j < n; j++)
-    //     {
-    //         for (int k = j + 1; k < n; k++)
-    //         {
-    //             if (sum == arr[i] + arr[j] + arr[k])
-    //             {
-    //                 v.push_back(i);
-    //                 v.push_back(j);
-    //                 v.push_back(k);
-    //             }
-    //         }
-    //     }
-    // }
-    sort(arr, arr + n);
-    for (int i = 0; i < n - 2; i++)
+    bool flag = false;
+    for (int i = 0; i < n; i++)
     {
-        int j = i + 1;
-        int k = n - 1;
-        while (j < k)
+        for (int j = 0; j < n; j++)
         {
-            if (arr[i] + arr[j] + arr[k] == sum)
+            for (int k = 0; k < n; k++)
             {
-                cout << "Triplet with the given sum have values " << arr[i] << ", " << arr[j] 
-                     << " & " << arr[k] << endl;
-                break;
-            }
-            else if (arr[i] + arr[j] + arr[k] < sum)
-            {
-                j++;
-            }
-            else
-            {
-                k--;
+                if (((arr[i] + arr[j] + arr[k]) == sum) && (i != j) && (k != j) && (i != k))
+                {
+                    cout << "Sum of " << arr[i] << ", " << arr[j] << " & " << arr[k] << " is = " << sum << endl;
+                    cout << "Valid Triplet exists" << endl;
+                    flag = true;
+                    break;
+                }
+                if (flag)
+                {
+                    break;
+                }
             }
         }
+        if (flag)
+        {
+            break;
+        }
+    }
+    if (!flag)
+    {
+        cout << "No Valid Triplet exists" << endl;
     }
 }
 
 int main()
 {
-    int arr[] = {12, 3, 4, 1, 6, 9, 20};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    int sum = 25;
-    // vector<int> v = tripletSum(arr, n, sum);
+    int n;
+    cin >> n;
+    int arr[n];
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
+    int sum;
+    cin >> sum;
     tripletSum(arr, n, sum);
-    // cout << "Triplet with the given sum is at indices " << v[0] << ", " << v[1] << " & " << v[2] << " " << endl;
-    // cout << "Triplet with the given sum have values " << arr[v[0]] << ", " << arr[v[1]] << " & " << arr[v[2]]
-    //      << " " << endl;
-    return 0;
 }

@@ -1,9 +1,7 @@
-// Populate inOrder successor
+// Inorder successor
 #include <iostream>
 #include <queue>
 #include <stack>
-#include <algorithm>
-#include <vector>
 
 using namespace std;
 class Node
@@ -53,46 +51,45 @@ void create(Node *root)
     }
 }
 
-void Rec_Preorder(Node *p)
+void Inorder(Node *p)
 {
-    if (p)
+    stack<Node *> s;
+    while (p != NULL || !s.empty())
     {
-        cout << p->data << " ";
-        Rec_Preorder(p->lchild);
-        Rec_Preorder(p->rchild);
+        if (p != NULL)
+        {
+            s.push(p);
+            p = p->lchild;
+        }
+        else
+        {
+            p = s.top();
+            s.pop();
+            cout << p->data << " ";
+            p = p->rchild;
+        }
     }
 }
-void Rec_Inorder(Node *p)
-{
-    if (p)
-    {
-        Rec_Inorder(p->lchild);
-        cout << p->data << " ";
-        Rec_Inorder(p->rchild);
-    }
-}
-
-void populateNext(Node* p)
-{
-    static Node* next_p = NULL;
+void InorderSuccessor(Node *p){
+     static Node *next = NULL;
  
-    if (p) {
-        populateNext(p->rchild);
+    if (p)
+    { 
+        InorderSuccessor(p->rchild);
+        
+        p->next = next;
+        next = p;
 
-        p->next = next_p;
-        next_p = p;
- 
-        populateNext(p->lchild);
+        InorderSuccessor(p->lchild);
     }
 }
-
-void Rec_Postorder(Node *p)
+void Preorder(Node *p)
 {
     if (p)
     {
-        Rec_Postorder(p->lchild);
-        Rec_Postorder(p->rchild);
         cout << p->data << " ";
+        Preorder(p->lchild);
+        Preorder(p->rchild);
     }
 }
 
@@ -100,16 +97,18 @@ int main()
 {
     create(root);
     cout << "Preorder: ";
-    Rec_Preorder(root);
+    Preorder(root);
     cout << endl;
     cout << "Inorder: ";
-    Rec_Inorder(root);
+    Inorder(root);
     cout << endl;
-    populateNext(root);
+    InorderSuccessor(root);
     Node *p = root;
-    while (p)
-    {
-        cout << p->data << " ";
+    while(p->lchild){
+        p = p->lchild;
+    }
+    while (p){
+        printf("Next of %d is %d\n", p->data, (p->next ? p->next->data : -1));
         p = p->next;
     }
     return 0;

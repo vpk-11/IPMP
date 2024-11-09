@@ -1,6 +1,7 @@
-// Isomorphic Trees
+// Check if Binary Tree is BST
 #include <iostream>
 #include <queue>
+#include <stack>
 
 using namespace std;
 class Node
@@ -10,8 +11,7 @@ public:
     Node *lchild;
     Node *rchild;
 };
-Node *root1 = new Node;
-Node *root2 = new Node;
+Node *root = new Node;
 
 void create(Node *root)
 {
@@ -60,38 +60,40 @@ void Preorder(Node *p)
     }
 }
 
-bool isIsomorphic(Node *n1, Node *n2)
+bool isBST(Node *p)
 {
-    if (n1 == NULL && n2 == NULL)
+    if (p == NULL)
+    {
         return true;
-
-    if (n1 == NULL ^ n2 == NULL)
+    }
+    if (p->lchild !=NULL && p->lchild->data > p->data)
+    {
         return false;
-
-    if (n1->data != n2->data)
+    }
+    if (p->rchild !=NULL && p->rchild->data < p->data)
+    {
         return false;
-
-    return (isIsomorphic(n1->lchild, n2->lchild) && isIsomorphic(n1->rchild, n2->rchild)) ||
-           (isIsomorphic(n1->lchild, n2->rchild) && isIsomorphic(n1->rchild, n2->lchild));
+    }
+    if (!isBST(p->lchild) || !isBST(p->rchild))
+    {
+        return false;
+    }
+    return true;
+    
 }
-
 int main()
 {
-    create(root1);
+    create(root);
     cout << "Preorder: ";
-    Preorder(root1);
+    Preorder(root);
     cout << endl;
-    create(root2);
-    cout << "Preorder: ";
-    Preorder(root2);
-    cout << endl;
-    if (isIsomorphic(root1, root2))
+    if (isBST(root))
     {
-        cout << "Suiiii" << endl;
+        cout << "Given Tree is a BST" << endl;
     }
     else
     {
-        cout << "Die Stargen" << endl;
+        cout << "Given Tree is not a BST" << endl;
     }
     return 0;
 }

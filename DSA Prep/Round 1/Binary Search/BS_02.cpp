@@ -1,108 +1,72 @@
-// Pivoted Binary Search
-// Find element in O(logn) time in a pivoted array
-#include <iostream>
+#include<iostream>
+#include<algorithm>
+#include<vector>
+
 using namespace std;
 
-int binarySearch(int arr[], int l, int h, int key)
+int BinarySearch(int A[], int left, int right, int key)
 {
-    while (l <= h)
-    {
-        int m = (l + h) / 2;
-        if (arr[m] == key)
-            return m;
+	int mid;
 
-        if (arr[m] < key)
-            l = m + 1;
-        else
-            h = m - 1;
-    }
-    return -1;
+	while( right - left > 1 )
+	{
+		mid = left + (right-left)/2;
+
+		if( A[mid] <= key )
+			left = mid;
+		else
+			right = mid;
+	}
+
+	if( A[left] == key )
+		return left;
+	if( A[right] == key )
+		return right;
+	else
+		return -1;
 }
 
-int findPivot(int arr[], int l, int h)
-{
-    if (h == l)
-    {
-        return l;
-    }
-    int mid;
-    while (l < h)
-    {
-        mid = (l + h) / 2;
-        if (mid < h && arr[mid] > arr[mid + 1])
-        {
-            return mid;
-        }
-        if (mid > l && arr[mid] < arr[mid - 1])
-        {
-            return (mid - 1);
-        }
-        if (arr[l] >= arr[mid])
-        {
-            h = mid - 1;
-        }
-        else
-        {
-            l = mid + 1;
-        }
-    }
-    return -1;
+int findPivot(int arr[],int low, int high){
+    if (high < low)
+        return -1;
+    if (high == low)
+        return low;
+ 
+    int mid = (low + high) / 2; 
+    if (mid < high && arr[mid] > arr[mid + 1])
+        return mid;
+ 
+    if (mid > low && arr[mid] < arr[mid - 1])
+        return (mid - 1);
+ 
+    if (arr[low] >= arr[mid])
+        return findPivot(arr, low, mid - 1);
+ 
+    return findPivot(arr, mid + 1, high);
 }
 
-int pivotedBinarySearch(int arr[], int l, int h, int key)
-{
-    int pivot = findPivot(arr, 0, h);
 
-    if (pivot == -1)
-    {
-        return binarySearch(arr, 0, h, key);
+int pivotSearch(int arr[], int n, int key){
+    int pivot = findPivot(arr,0,n-1);
+    if(pivot == -1){
+        return BinarySearch(arr, 0, n-1, key);
     }
-
-    if (arr[pivot] == key)
-    {
+    if(arr[pivot] == key){
         return pivot;
     }
-    if (arr[0] <= key)
-    {
-        return binarySearch(arr, l, pivot - 1, key);
+    else if (arr[0]<= key){
+        return BinarySearch(arr,0,pivot-1,key);
+    } else {
+        return BinarySearch(arr, pivot + 1, n-1, key);
     }
-
-    return binarySearch(arr, pivot + 1, h, key);
 }
 
-int pivotedSearch_IMP(int arr[], int l, int h, int key)
-{
-    int mid;
-    while (l <= h)
-    {
-        mid = l + (h - l) / 2;
+int main(){
 
-        if (arr[mid] == key)
-            return mid;
-        // left part is sorted
-        if (arr[l] <= arr[mid])
-        {
-            if (key >= arr[l] && key < arr[mid])
-                h = mid - 1;
-            else
-                l = mid + 1;
-        }
-        // right part is sorted
-        else
-        {
-            if (key > arr[mid] && key <= arr[h])
-                l = mid + 1;
-            else
-                h = mid - 1;
-        }
-    }
-    return -1;
-}
-
-int main()
-{
-    int arr[] = {5, 6, 7, 8, 9, 10, 1, 2, 3, 4};
-    int n = sizeof(arr) / sizeof(arr[0]);
-
-    cout << pivotedBinarySearch(arr, 0, n - 1, 4) << endl;
+    int arr[] = {3,4,5,6,1,2};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    int key;
+    cin>>key;
+    cout<<"Index of element in Pivoted array : "<<pivotSearch(arr,n,key)<<endl;
+    return 0;
 }

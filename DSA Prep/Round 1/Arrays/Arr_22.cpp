@@ -1,55 +1,53 @@
-// Search in a row-wise and column-wise sorted matrix in Linear Time
 #include <iostream>
-#include <algorithm>
-#include <vector>
 using namespace std;
-
-pair<int, int> search(int v[4][4], int n, int key)
-{
-    int i = 0, j = n - 1;
-    pair<int, int> p;
-    p.first = -1;
-    p.second = -1;
-    if (key < v[0][0] || key > v[n - 1][n - 1])
-    {
-        return p;
-    }
-
-    while (i < n && j >= 0)
-    {
-        if (v[i][j] == key)
-        {
-            p.first = i;
-            p.second = j;
-            return p;
-        }
-        if (v[i][j] > key)
-        {
-            j--;
-        }
-        else
-        {
-            i++;
-        }
-    }
-    return p;
-}
 
 int main()
 {
-    int mat[4][4] = {{10, 20, 30, 40},
-                     {15, 25, 35, 45},
-                     {27, 29, 37, 48},
-                     {32, 33, 39, 50}};
-    pair<int, int> p = search(mat, 4, 500);
-    if (p.first != -1)
-    {
-        cout << p.first << " " << p.second << " " << mat[p.first][p.second] << endl;
-    }
-    else
-    {
-        cout << "Nope" << endl;
-    }
+    int a[4][4] = {{1, 2, 3, 4},
+                     {5, 6, 7, 8},
+                     {9, 10, 11, 12},
+                     {13, 14, 15, 16}};
 
+    // sprial order print logic
+    int row_start = 0, row_end = 3, col_start = 0, col_end = 3; //  row_end = m-1 // col_end = n-1
+
+    while ((row_start <= row_end) && (col_start <= col_end))
+    {
+        // For row start
+        for (int col = col_start; col <= col_end; col++)
+        {
+            cout << a[row_start][col] << " ";
+        }
+        cout << endl;
+
+        row_start++;
+
+        // For Col end
+        for (int row = row_start; row <= row_end; row++)
+        {
+            cout << a[row][col_end] << " ";
+        }
+        cout << endl;
+
+        col_end--;
+
+        // For row end
+        for (int col = col_end; col >= col_start; col--)
+        {
+            cout << a[row_end][col] << " ";
+        }
+        cout << endl;
+
+        row_end--;
+
+        // For Col start
+        for (int row = row_end; row >= row_start; row--)
+        {
+            cout << a[row][col_start] << " ";
+        }
+        cout << endl;
+
+        col_start++;
+    }
     return 0;
 }

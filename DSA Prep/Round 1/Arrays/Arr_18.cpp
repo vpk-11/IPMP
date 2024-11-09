@@ -1,43 +1,54 @@
-// Sum Closest to 0
-// Finding 2 numbers so that thier diff is minimum
+// Sum closest to 0
 #include <iostream>
 #include <algorithm>
+#include <vector>
 #include <climits>
 using namespace std;
 
-pair<int, int> minAbsSum(int arr[], int n)
+void MinSum(int n, int arr[])
 {
-    pair<int, int> p;
-    p.first = -1;
-    p.second = -1;
-    sort(arr, arr + n);
+    // Simple Method
+    int sum = INT_MAX, index1 = 0, index2 = 1;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if ((abs(arr[j] + arr[i]) < sum) && i != j)
+            {
+                sum = abs(arr[j] + arr[i]);
+                index1 = i;
+                index2 = j;
+            }
+        }
+    }
+    cout << "Min sum = " << arr[index1] + arr[index2] << " between " << arr[index1] << " & " << arr[index2] << endl;
+    // O(nlogn) Method
     int l = 0, r = n - 1;
-    int minSum = INT_MAX;
+    sort(arr, arr + n);
+    int min_sum;
     while (l < r)
     {
-        int sum = arr[l] + arr[r];
-        if (minSum > abs(sum))
+        if (abs(arr[l] + arr[r]) < abs(min_sum))
         {
-            minSum = abs(sum);
-            p.first = arr[l];
-            p.second = arr[r];
+            min_sum = abs(arr[l] + arr[r]);
+            index1 = l;
+            index2 = r;
         }
-        else if (abs(sum) == abs(minSum))
-        {
-            minSum = max(sum, minSum);
-        }
-        if (sum > 0)
-            r--;
-        else
+        if ((arr[l] + arr[r]) < 0)
             l++;
+        if ((arr[l] + arr[r]) > 0)
+            r--;
     }
-    return p;
+
+    cout << "Min sum = " << arr[index1] + arr[index2] << " between " << arr[index1] << " & " << arr[index2] << endl;
 }
 
 int main()
 {
     int arr[] = {1, 60, -10, 70, -80, 85};
     int n = sizeof(arr) / sizeof(arr[0]);
-    pair<int, int> p = minAbsSum(arr, n);
-    cout << "Elements are " << p.first << " & " << p.second << endl;
+
+    MinSum(n, arr);
+
+    return 0;
 }

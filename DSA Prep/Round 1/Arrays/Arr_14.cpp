@@ -1,41 +1,38 @@
-// Least Positive missing number
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include<iostream>
+#include<algorithm>
+#include<vector>
 using namespace std;
 
-int leastPosMissElem(int arr[], int n)
-{
-    if (n <= 1)
-    {
-        return 1;
-    }
-    bool present[n + 1];
-    for (int i = 0; i < n + 1; i++)
-    {
-        present[i] = false;
-    }
+int main(){
+    int n;
+    cin>>n;
+    int arr[n];
     for (int i = 0; i < n; i++)
-    {
-        if (arr[i] > 0 && arr[i] <= n)
-        {
-            present[arr[i]] = true;
+        cin>>arr[i];
+    
+    sort(arr, arr + n);
+    for (int i = 0; i < n; i++)
+        cout<<arr[i]<<" ";
+
+    int pivot = 0;
+
+    for (int i = 0; i < n; i++){
+        if (arr[i]<=0 && arr[i+1]>0){
+            pivot = i;
+            break;
         }
     }
-
-    for (int i = 1; i <= n; i++)
-    {
-        if (!present[i])
-        {
-            return i;
+    int count = 1;
+    for (int i = pivot; i < n; i++){
+        if(count==arr[i]){
+            count++;
+        }else if(count<arr[i] && count > arr[i-1]){
+            break;
+        } else{
+            continue;
         }
     }
-    return n + 1;
-}
+    cout<<endl<<"Missing Number is "<<count<<endl;
 
-int main()
-{
-    int arr[] = {2, 3, 7, 6, 8, -1, -10, 15};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    cout << "L P M N = " << leastPosMissElem(arr, n) << endl;
+    return 0;
 }

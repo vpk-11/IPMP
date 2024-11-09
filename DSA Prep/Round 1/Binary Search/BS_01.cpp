@@ -1,44 +1,65 @@
-// Binary Search
-#include <iostream>
+#include<iostream>
+#include<algorithm>
+#include<vector>
+
 using namespace std;
 
-int binarySearch(int arr[], int l, int h, int key)
+// Standard Binary Search
+
+int BinarySearch(int A[], int left, int right, int key)
 {
-    int m;
-    while (l <= h)
+	int mid;
+
+	while( left <= right )
+	{
+		mid = left + (right-left)/2;
+
+		if( A[mid] == key ) // first comparison
+			return mid;
+
+		if( A[mid] < key ) // second comparison
+			left = mid + 1;
+		else
+			right = mid - 1;
+	}
+
+	return -1;
+} 
+/* Fewer Searches
+// Invariant: A[left] <= key and A[right] > key
+// Boundary: |right - left| = 1
+// Input: A[left .... right-1]
+int BinarySearch(int A[], int left, int right, int key)
+{
+	int mid;
+
+	while( right - left > 1 )
+	{
+		mid = left + (right-left)/2;
+
+		if( A[mid] <= key )
+			left = mid;
+		else
+			right = mid;
+	}
+
+	if( A[left] == key )
+		return left;
+	if( A[right] == key )
+		return right;
+	else
+		return -1;
+} 
+*/
+
+int main(){
+
+    int arr[8];
+    for (int i = 0;i < 8; i++)
     {
-        m = (l + h) / 2;
-        if (arr[m] == key)
-            return m;
-
-        if (arr[m] < key)
-            l = m + 1;
-        else
-            h = m - 1;
+        cin>>arr[i];
     }
+    cout << BinarySearch(arr,0,8-1,5)<< endl;
 
-    return -1;
-}
-
-int rBinarySearch(int arr[], int l, int h, int key)
-{
-    if (h < l)
-        return -1;
-
-    int mid = (l + h) / 2;
-    if (key == arr[mid])
-        return mid;
-
-    if (key > arr[mid])
-        return rBinarySearch(arr, (mid + 1), h, key);
-
-    return rBinarySearch(arr, l, (mid - 1), key);
-}
-
-int main()
-{
-    int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    cout << binarySearch(arr, 0, n - 1, 3) << endl;
-    cout << rBinarySearch(arr, 0, n - 1, 1) << endl;
+    return 0;
 }

@@ -1,63 +1,53 @@
-// Max Diff b/w 2 nums in array that appear after one another
 #include <iostream>
+#include <algorithm>
+#include <vector>
+#include <climits>
 using namespace std;
 
-// Variation of this Problem
-int findMaxDiff(int arr[], int n)
-{
-    // For finding max diff between the left smallest and right smallest of any element
-    int ans = 0;
+void MaxDifference( int n,int arr[]){
+    // Simple Method
+    int difference = 0, index1 = 0, index2=1;
     for (int i = 0; i < n; i++)
     {
-        int r = 0;
-        int l = 0;
-        for (int j = i; j < n; j++)
+        for (int j = i + 1; j < n; j++)
         {
-            if (arr[i] > arr[j])
+            if ((arr[j] - arr[i]) > difference)
             {
-                r = arr[j];
-                break;
+                difference = arr[j] - arr[i];
+                index1 = i; index2 = j;
             }
         }
-        for (int j = i; j >= 0; j--)
+    }
+    cout<<"Max difference = "<<difference<<" between "<<arr[index1]<<" & "<<arr[index2]<<endl;
+    int min_element = arr[0], max_diff = arr[1] - arr[0];
+    index2 = 1; index1 = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] - min_element > max_diff)
         {
-            if (arr[i] > arr[j])
+            max_diff = arr[i] - min_element;
+            index2 = i;
+        }
+        if (arr[i]<min_element)
+        {
+            min_element = arr[i];
+            if (i < index2)
             {
-                l = arr[j];
-                break;
+               index1 = i;
             }
-        }
-        ans = max(ans, abs(l - r));
-    }
-    return ans;
-}
-
-int maxDiff(int arr[], int n)
-{
-    if (n <= 1)
-    {
-        return 0;
-    }
-    int maxiDiff = arr[1] - arr[0];
-
-    int minElem = arr[0];
-    for (int i = 1; i < n; i++)
-    {
-        if (arr[i] - minElem > maxiDiff)
-        {
-            maxiDiff = arr[i] - minElem;
-        }
-        if (arr[i] < minElem)
-        {
-            minElem = arr[i];
+            
         }
     }
-    return maxiDiff;
+    cout<<"Max difference = "<<max_diff<<" between "<<arr[index1]<<" & "<<arr[index2]<<endl;
+    
 }
 
 int main()
 {
-    int arr[] = {1, 2, 90, 10, 110};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    cout << "Maximum difference is " << maxDiff(arr, n) << endl;
+    int arr[] = {2,3,10,6,4,8,1};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    
+   MaxDifference(n,arr);
+
+    return 0;
 }

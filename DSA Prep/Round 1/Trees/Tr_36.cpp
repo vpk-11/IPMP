@@ -1,9 +1,11 @@
-// Convert Tree into its sum tree
+// Children Sum Property
+// /* C++ Program to convert an aribitary
+// binary tree to a tree that hold
+// children sum property */
 #include <iostream>
 #include <queue>
 #include <stack>
-#include <algorithm>
-#include <vector>
+#include <ctype.h>
 
 using namespace std;
 class Node
@@ -61,16 +63,81 @@ void Preorder(Node *p)
         Preorder(p->rchild);
     }
 }
-
-int toSumTree(Node *p)
+bool isSumProp(Node *p)
 {
-    if (p == NULL)
-        return 0;
+    if (p == NULL || p->lchild == NULL && p->rchild == NULL)
+    {
+        return true;
+    }
     else
     {
-        int temp = p->data;
-        p->data = toSumTree(p->lchild) + toSumTree(p->rchild);
-        return p->data + temp;
+        int sum = 0;
+        if (p->lchild != NULL)
+        {
+            sum += p->lchild->data;
+        }
+        if (p->rchild != NULL)
+        {
+            sum += p->rchild->data;
+        }
+
+        if ((p->data == sum) && isSumProp(p->lchild) && isSumProp(p->rchild))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
+
+void increment(Node *p, int diff)
+{
+    if (p->lchild != NULL)
+    {
+        p->lchild->data += diff;
+        increment(p->lchild, diff);
+    }
+    else if (p->rchild != NULL)
+    {
+        p->rchild->data += diff;
+        increment(p->rchild, diff);
+    }
+}
+
+void convertTree(Node *p)
+{
+    int left_data = 0, right_data = 0, diff;
+
+    if (p == NULL || (p->lchild == NULL && p->rchild == NULL))
+    {
+        return;
+    }
+    else
+    {
+        convertTree(p->lchild);
+        convertTree(p->rchild);
+
+        if (p->lchild != NULL)
+        {
+            left_data = p->lchild->data;
+        }
+
+        if (p->rchild != NULL)
+        {
+            right_data = p->rchild->data;
+        }
+        diff = left_data + right_data - p->data;
+
+        if (diff > 0)
+        {
+            p->data = p->data + diff;
+        }
+        if (diff < 0)
+        {
+            increment(p, -diff);
+        }
     }
 }
 
@@ -80,9 +147,9 @@ int main()
     cout << "Preorder: ";
     Preorder(root);
     cout << endl;
-    cout << "After Transformation to sum tree" << endl;
-    toSumTree(root);
+    convertTree(root);
     cout << "Preorder: ";
     Preorder(root);
     cout << endl;
+    return 0;
 }

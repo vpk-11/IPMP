@@ -1,53 +1,52 @@
-// Max Elem in which it increases and then decreases
+// Cpp code for Max Point in array
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
-int maxSearch(int arr[], int l, int r)
+int BinarySearch(int arr[], int left, int right)
 {
-    while (l <= r)
+    if (right >= left)
     {
-        int m = (l + r) / 2;
-
-        if ((r == l + 1) && arr[l] >= arr[r]) // Case with 2 elems
-            return arr[l];
-
-        if ((r == l + 1) && arr[l] < arr[r]) // case with 2 elems
-            return arr[r];
-
-        if (arr[m] > arr[m + 1] && arr[m] > arr[m - 1]) // m is bigger than left and right
+        int mid = (left + right) / 2;
+        if (arr[mid] >= arr[mid-1] && arr[mid] >= arr[mid+1])
+            return mid;
+        if (arr[mid] >= arr[mid-1] && arr[mid] <= arr[mid+1])
         {
-            return arr[m];
+            return BinarySearch(arr, (mid + 1), right);
         }
-        else if (arr[m] > arr[m + 1] && arr[m] < arr[m - 1])
+        if (arr[mid] <= arr[mid-1] && arr[mid] >= arr[mid+1])
         {
-            r = m - 1;
-        }
-        else
-        {
-            l = m + 1;
+            return BinarySearch(arr, left, (mid - 1));
         }
     }
     return -1;
+}
 
-    // int start = 0;
-    // int end = n;
-    // int mid;
-    // while (start <= end)
-    // {
-    //     mid = start + (end - start) / 2;
-    //     if ((mid == 0 || arr[mid] > arr[mid - 1]) && (mid == n - 1 || arr[mid] > arr[mid + 1]))
-    //         return arr[mid];
-    //     if (mid - 1 > 0 && arr[mid] < arr[mid - 1])
-    //         end = mid - 1;
-    //     if (mid + 1 < n && arr[mid] < arr[mid + 1])
-    //         start = mid + 1;
-    // }
-    // return -1;
+int MaxPoint(int arr[], int n)
+{
+    //Linear Search method
+    int max = arr[0];
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        if (arr[i] > max)
+            max = arr[i];
+        if(arr[i] > arr[i+1])
+            break;
+    }
+    return i;
 }
 
 int main()
 {
-    int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    int arr[] = {1, 2, 3, 4, 3, 2, 1};
+    int index;
     int n = sizeof(arr) / sizeof(arr[0]);
-    cout << maxSearch(arr, 0, n - 1) << endl;
+    cout << "Linear Search" << endl;
+    index = MaxPoint(arr,n);
+    cout << "Max point is " << arr[index] << " at index " << index << endl;
+
+    cout << "Binary Search" << endl;
+    index = BinarySearch(arr,0,n-1);
+    cout << "Max point is " << arr[index] << " at index " << index << endl;
 }

@@ -1,0 +1,1 @@
+// In a binary tree, if parent is 0, then left child is 0 and right child is 1. if parent is 1, then left c

@@ -1,37 +1,42 @@
-// Two Sum Problem
 #include <iostream>
-#include <vector>
-#include <map>
 using namespace std;
 
-vector<int> twoSum(int arr[], int n, int sum)
+void sumPair(int arr[], int n, int sum)
 {
-    map<int, int> hash;
-    vector<int> v;
+    bool flag = false;
     for (int i = 0; i < n; i++)
     {
-        if (hash[sum - arr[i]])
+        for (int j = 0; j < n; j++)
         {
-            v.push_back(i);
-            v.push_back(hash[sum - arr[i]]);
-            return v;
-        }
-        else
-        {
-            hash[arr[i]] = i;
+            if (((arr[i] + arr[j]) == sum)&& i!=j)
+            {
+                cout << "Sum of " << arr[i] << " & " << arr[j] << " is = " << sum<<endl;
+                cout<<"Valid Pair exists"<<endl;
+                flag = true;
+                break;
+            }
+            if (flag)
+            {
+                break;
+            }
         }
     }
-    v.push_back(-1);
-    v.push_back(-1);
-    return v;
+    if (!flag)
+    {
+        cout<<"No Valid Pair exists"<<endl;
+    }
 }
 
 int main()
 {
-    int arr[] = {0, -1, 2, -3, 1};
-    int sum = -2;
-    int n = sizeof(arr) / sizeof(arr[0]);
-    vector<int> v = twoSum(arr, n, sum);
-    cout << "The twoSum pair has indices : " << v[0] << " & " << v[1] << " with values " << arr[v[0]] << " & " << arr[v[1]] << endl;
-    return 0;
+    int n;
+    cin >> n;
+    int arr[n];
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
+    int sum;
+    cin >> sum;
+    sumPair(arr, n, sum);
 }

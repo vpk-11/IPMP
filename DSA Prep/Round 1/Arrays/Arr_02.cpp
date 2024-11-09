@@ -1,35 +1,44 @@
-// Number occuring Odd number of times
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <unordered_map>
 using namespace std;
 
-int numberWithOddOccur(int v[], int n)
+int OddOccurrances(int arr[], int n)
 {
-    if (n == 0)
-    {
-        return -1;
+    // Linear method O(n^2)
+    /*
+    for (int i = 0; i < n; i++) {
+        int count = 0;
+        for (int j = 0; j < n; j++)
+            if (arr[i] == arr[j])
+                count++;
+        if (count % 2 != 0)
+            return arr[i];
     }
-    unordered_map<int, int> hash;
+    return -1;
+    */
+    // Unordered Map method
+    unordered_map <int, int> map;
     for (int i = 0; i < n; i++)
+       map[arr[i]]++;
+    
+    for (int i = 0; i < map.size(); i++)
     {
-        hash[v[i]]++;
-    }
-    for (auto it : hash)
-    {
-        if (it.second % 2 != 0)
+        if (map[arr[i]]%2 != 0)
         {
-            return it.first;
+            return arr[i];
         }
     }
     return -1;
 }
+int main(){
+    int m;
+    cin >> m;
 
-int main()
-{
-    int arr[] = {2, 3, 5, 4, 5, 2, 4, 3, 5, 2, 4, 4, 2};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    cout << numberWithOddOccur(arr, n) << endl;
-
+    int arr[m];
+    for (int i = 0; i < m; i++)
+        cin>>arr[i];
+    cout<<OddOccurrances(arr,m)<<endl;
     return 0;
 }

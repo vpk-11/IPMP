@@ -1,30 +1,48 @@
-// Finding 2 numbers so that thier diff is minimum
+// Elements with Min Difference
 #include <iostream>
 #include <algorithm>
+#include <vector>
 #include <climits>
 using namespace std;
 
-int minDiff(int arr[], int n)
-{
-    if (n <= 1)
+void minDifference( int n,int arr[]){
+    // Simple Method
+    int difference = INT_MAX, index1 = 0, index2=1;
+    for (int i = 0; i < n; i++)
     {
-        return 0;
-    }
-    sort(arr, arr + n);
-    int miniDiff = INT_MAX;
-    for (int i = 1; i < n; i++)
-    {
-        if (arr[i] - arr[i - 1] < miniDiff)
+        for (int j = 0; j < n; j++)
         {
-            miniDiff = arr[i] - arr[i-1];
+            if ((abs(arr[j] - arr[i]) < difference) && i!=j)
+            {
+                difference = abs(arr[j] - arr[i]);
+                index1 = i; index2 = j;
+            }
         }
     }
-    return miniDiff;
+    cout<<"Min difference = "<<difference<<" between "<<arr[index1]<<" & "<<arr[index2]<<endl;
+    sort(arr, arr+n);
+    int min_diff = arr[n-1] - arr[0];
+    index2 = 1; index1 = 0;
+    for (int i = 1; i < n; i++)
+    {
+        if (arr[i] - arr[i-1] < min_diff)
+        {
+            min_diff = arr[i] - arr[i-1];
+            index1 = i-1;
+            index2 = i;
+        }
+        
+    }
+    cout<<"Min difference = "<<min_diff<<" between "<<arr[index1]<<" & "<<arr[index2]<<endl;
+    
 }
 
 int main()
 {
-    int arr[] = {1, 2, 90, 10, 110};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    cout << "Minimum difference is " << minDiff(arr, n) << endl;
+    int arr[] = {2,3,10,6,4,8,1};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    
+   minDifference(n,arr);
+
+    return 0;
 }

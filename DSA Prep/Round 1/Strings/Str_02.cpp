@@ -1,57 +1,32 @@
-// Print All Permutation of String
+// Permutations of a string
 #include <iostream>
+#include <algorithm>
 #include <string>
-#include <vector>
-#include <map>
 using namespace std;
 
-void permute(string a, int l, int r, vector<string> &res)
+void permute(string a, int l, int r) // Doesn't consider duplicate strings
 {
     if (l == r)
-        res.push_back(a);
+        cout << a << endl;
     else
     {
         for (int i = l; i <= r; i++)
         {
             swap(a[l], a[i]);
-            permute(a, l + 1, r, res);
+            permute(a, l + 1, r);
             swap(a[l], a[i]);
         }
     }
 }
-vector <string> printPermute(string s){
-    vector <string> res;
-    if(s.length() == 0){
-        return res;
-    }
-    if (s.length() == 1)
-    {
-        res.push_back(s);
-        return res;
-    }
-    
-    permute(s, 0, s.length() - 1, res);
-    map<string, int> map;
-    for (int i = 0; i < res.size(); i++)
-    {
-        map[res[i]]++;
-    }
-    vector<string> ans;
-    for (auto it : map)
-    {
-        ans.push_back(it.first);
-    }
-    return ans;
-    
-}
 
 int main()
 {
-    string s = "abb";
-    vector<string> ans = printPermute(s);
-    for (int i = 0; i < ans.size(); i++)
-    {
-        cout << ans[i] << endl;
-    }
+    string s;
+
+    cout << "Enter the string : ";
+    cin >> s;
+    int n = s.length();
+    cout << "\nAll possible strings are : " << endl;
+    permute(s, 0, n - 1);
     return 0;
 }

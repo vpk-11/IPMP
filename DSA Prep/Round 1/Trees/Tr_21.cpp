@@ -1,9 +1,7 @@
-// Print Left View
+// Left View of Tree
 #include <iostream>
 #include <queue>
 #include <stack>
-#include <algorithm>
-#include <vector>
 
 using namespace std;
 class Node
@@ -52,63 +50,29 @@ void create(Node *root)
     }
 }
 
-void PreOrder(Node *p)
+void Preorder(Node *p)
 {
     if (p)
     {
         cout << p->data << " ";
-        PreOrder(p->lchild);
-        PreOrder(p->rchild);
+        Preorder(p->lchild);
+        Preorder(p->rchild);
     }
 }
-
-void printLeftView(Node *root)
+void printBoundaryLeft(Node *p)
 {
-    // if (root == NULL)
-    // {
-    //     return;
-    // }
-    // cout << root->data << " ";
-    // if (root->lchild)
-    // {
-    //     // cout << root->data << " ";
-    //     printLeftView(root->lchild);
-    // }
-    // else if (root->rchild)
-    // {
-    //     // cout << root->data << " ";
-    //     printLeftView(root->rchild);
-    // }
-
-    vector<int> v;
-
-    if (root == NULL)
+    if (p == NULL)
+    {
         return;
-
-    queue<Node *> q;
-    Node *curr = root;
-    q.push(curr);
-
-    while (!q.empty())
-    {
-        int count = q.size();
-        for (int i = 0; i < count; i++)
-        {
-            curr = q.front();
-            q.pop();
-            if (i == 0)
-            {
-                v.push_back(curr->data);
-            }
-            if (curr->lchild != NULL)
-                q.push(curr->lchild);
-            if (curr->rchild != NULL)
-                q.push(curr->rchild);
-        }
     }
-    for (auto i : v)
+    cout << p->data << " ";
+    if (p->lchild)
     {
-        cout << i << " ";
+        printBoundaryLeft(p->lchild);
+    }
+    else if (p->rchild)
+    {
+        printBoundaryLeft(p->rchild);
     }
 }
 
@@ -116,8 +80,8 @@ int main()
 {
     create(root);
     cout << "Preorder: ";
-    PreOrder(root);
+    Preorder(root);
     cout << endl;
-    printLeftView(root);
+    printBoundaryLeft(root);
     return 0;
 }

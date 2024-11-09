@@ -1,9 +1,8 @@
-// Check if Tree is Complete
+// Mirror Tree
+// Foldable Tree
 #include <iostream>
 #include <queue>
 #include <stack>
-#include <algorithm>
-#include <vector>
 
 using namespace std;
 class Node
@@ -52,66 +51,41 @@ void create(Node *root)
     }
 }
 
-bool isComplete(Node *p)
-{
-    queue<Node *> q;
-    q.push(p);
-    bool flag = false;
-    while (!q.empty())
-    {
-        p = q.front();
-        q.pop();
-        if (p->lchild)
-        {
-            if (flag)
-            {
-                return false;
-            }
-            q.push(p->lchild);
-        }
-        else
-        {
-            flag = true;
-        }
-        if (p->rchild)
-        {
-            if (flag)
-            {
-                return false;
-            }
-            q.push(p->rchild);
-        }
-        else
-        {
-            flag = true;
-        }
-    }
-    return true;
-}
-
-void Rec_Preorder(Node *p)
+void Inorder(Node *p)
 {
     if (p)
     {
+        Inorder(p->lchild);
         cout << p->data << " ";
-        Rec_Preorder(p->lchild);
-        Rec_Preorder(p->rchild);
+        Inorder(p->rchild);
+    }
+}
+
+void mirror(Node *p)
+{
+    if (p == NULL)
+        return;
+    else
+    {
+        Node *temp;
+        // Call for SubTrees
+        mirror(p->lchild);
+        mirror(p->rchild);
+        // Swap Function
+        temp = p->lchild;
+        p->lchild = p->rchild;
+        p->rchild = temp;
     }
 }
 
 int main()
 {
     create(root);
-    cout << "Preorder: ";
-    Rec_Preorder(root);
+    cout << "Inorder: ";
+    Inorder(root);
     cout << endl;
-    if (isComplete(root))
-    {
-        cout << "Suiiii" << endl;
-    }
-    else
-    {
-        cout << "Die Stargen" << endl;
-    }
+    mirror(root);
+    Inorder(root);
+    cout << endl;
     return 0;
 }

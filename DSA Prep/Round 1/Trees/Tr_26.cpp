@@ -1,14 +1,18 @@
-// Add all greater values in BST to each node
+// LCA in BST
+// Inorder successor in BST
 #include <iostream>
-using namespace std;
+#include <queue>
+#include <stack>
 
-struct Node
+using namespace std;
+class Node
 {
+public:
     int data;
     Node *lchild;
     Node *rchild;
 };
-Node *root = NULL;
+Node *root = new Node;
 
 void Insert(int key)
 {
@@ -50,6 +54,7 @@ void Insert(int key)
         r->rchild = p;
     }
 }
+
 void Inorder(Node *p)
 {
     if (p != NULL)
@@ -60,41 +65,55 @@ void Inorder(Node *p)
     }
 }
 
-void modifyBSTUtil(Node *root, int *sum)
+void Preorder(Node *p)
 {
-    if (root == NULL)
-        return;
-
-    modifyBSTUtil(root->rchild, sum);
-
-    *sum = *sum + root->data;
-    root->data = *sum;
-
-    modifyBSTUtil(root->lchild, sum);
-}
-
-Node *minValue()
-{
-    Node *t = root;
-    while (t->lchild)
+    if (p)
     {
-        t = t->lchild;
+        cout << p->data << " ";
+        Preorder(p->lchild);
+        Preorder(p->rchild);
     }
-    return t;
 }
+Node *MinValue(Node *p)
+{
+    Node *current = p;
 
+    while (current->lchild != NULL)
+    {
+        current = current->lchild;
+    }
+    return current;
+}
+Node *LCA(Node *p, int n1, int n2)
+{
+    if (p == NULL)
+    {
+        return NULL;
+    }
+    if (p->data > n1 && p->data > n2)
+    {
+        return LCA(p->lchild, n1, n2);
+    }
+    if (p->data < n1 && p->data < n2)
+    {
+        return LCA(p->rchild, n1, n2);
+    }
+    return p;
+}
 int main()
 {
-    Insert(10);
-    Insert(5);
-    Insert(20);
-    Insert(8);
-    Insert(30);
+    int arr[] = {50, 30, 70, 20, 60, 40, 80};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    for (int i = 0; i < n; i++)
+    {
+        Insert(arr[i]);
+    }
+    cout << "Inorder: ";
     Inorder(root);
     cout << endl;
-    int sum = 0;
-    modifyBSTUtil(root, &sum);
-    Inorder(root);
-    cout << endl;
+    int n1, n2;
+    cin >> n1 >> n2;
+    Node *temp = LCA(root, n1, n2);
+    cout << "The LCA of " << n1 << " & " << n2 << " is " << temp->data << endl;
     return 0;
 }

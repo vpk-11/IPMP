@@ -1,11 +1,7 @@
-// Convert Binary Tree to Double Tree
+// Add nodes of greater value to Nodes in BST
 #include <iostream>
-#include <queue>
-#include <vector>
-#include <algorithm>
-#include <climits>
-
 using namespace std;
+
 class Node
 {
 public:
@@ -13,87 +9,79 @@ public:
     Node *lchild;
     Node *rchild;
 };
-Node *root = new Node;
+Node *root = NULL;
 
-void create(Node *root)
+void Insert(int key)
 {
-    queue<Node *> q;
-    Node *p, *t;
-    int x;
-    cout << "Enter Root Value ";
-    cin >> x;
-    root->data = x;
-    root->lchild = root->rchild = NULL;
-    q.push(root);
-    while (!q.empty())
+    Node *t = root;
+    Node *p, *r;
+    if (root == NULL)
     {
-        p = q.front();
-        q.pop();
-        printf("Enter Left Child of %d: ", p->data);
-        cin >> x;
-        if (x != -1)
-        {
-            t = new Node;
-            t->data = x;
-            t->lchild = t->rchild = NULL;
-            p->lchild = t;
-            q.push(t);
-        }
-        printf("Enter Right Child of %d: ", p->data);
-        cin >> x;
-        if (x != -1)
-        {
-            t = new Node;
-            t->data = x;
-            t->lchild = t->rchild = NULL;
-            p->rchild = t;
-            q.push(t);
-        }
-    }
-}
-
-void Preorder(Node *p)
-{
-    if (p)
-    {
-        cout << p->data << " ";
-        Preorder(p->lchild);
-        Preorder(p->rchild);
-    }
-}
-
-Node *newNode(int data)
-{
-    Node *temp = new Node;
-    temp->data = data;
-    temp->lchild = NULL;
-    temp->rchild = NULL;
-
-    return temp;
-}
-
-void doubleTree(Node *p)
-{
-    if (p == NULL)
+        p = new Node;
+        p->data = key;
+        p->lchild = p->rchild = NULL;
+        root = p;
         return;
-
-    doubleTree(p->lchild);
-    doubleTree(p->rchild);
-
-    Node *oldLeft = p->lchild;
-    p->lchild = newNode(p->data);
-    p->lchild->lchild = oldLeft;
+    }
+    while (t != NULL)
+    {
+        r = t;
+        if (key < t->data)
+        {
+            t = t->lchild;
+        }
+        else if (key > t->data)
+        {
+            t = t->rchild;
+        }
+        else
+        {
+            return;
+        }
+    }
+    p = new Node;
+    p->data = key;
+    p->lchild = p->rchild = NULL;
+    if (r->data > p->data)
+    {
+        r->lchild = p;
+    }
+    else
+    {
+        r->rchild = p;
+    }
+}
+void Inorder(Node *p)
+{
+    if (p != NULL)
+    {
+        Inorder(p->lchild);
+        cout << p->data << " ";
+        Inorder(p->rchild);
+    }
 }
 
+void treeSum(Node *p, int* sum){
+    if(p==NULL){
+        return;
+    }
+    treeSum(p->rchild, sum);
+    *sum+= p->data;
+    p->data = *sum;
+    treeSum(p->lchild, sum);
+}
 int main()
 {
-    create(root);
-    cout << "Preorder: ";
-    Preorder(root);
-    cout << endl;
-    doubleTree(root);
-    cout << "Preorder: ";
-    Preorder(root);
-    cout << endl;
-    return 0;
+    int arr[] = {50, 30, 70, 20, 60, 40, 80};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    for (int i = 0; i < n; i++)
+    {
+        Insert(arr[i]);
+    }
+    Inorder(root);
+    cout<<endl;
+    int sum = 0;
+    treeSum(root, &sum);
+    Inorder(root);
+    cout<<endl;
 }

@@ -1,64 +1,64 @@
-// Find smallest unsorted subarray in array
-
+// Cpp code for Min length of unsorted array
 #include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
-vector<int> printUnsorted(int arr[], int n)
+void minLengthOfUnsorted(int arr[], int n)
 {
-    vector <int> v;
-    int l = 0, h = n - 1, i;
-    while (l < n - 1)
+    int s = 0, e = n - 1, i, max, min;
+
+    for (s = 0; s < n - 1; s++)
     {
-        if (arr[l] > arr[l + 1])
+        if (arr[s] > arr[s + 1])
             break;
-        l++;
     }
-    if (l == n - 1)
+    if (s == n - 1)
     {
-        v.push_back(0);
-        v.push_back(0);
-        return v;
+        cout << "The Array is sorted";
+        return;
     }
-    while (h > 1)
+
+    for (e = n - 1; e > 0; e--)
     {
-        if (arr[h - 1] > arr[h])
+        if (arr[e] < arr[e - 1])
             break;
-        h--;
     }
-    int low = arr[l], high = arr[l];
-    for (i = l + 1; i <= h; i++)
+
+    max = arr[s];
+    min = arr[s];
+    for (i = s + 1; i <= e; i++)
     {
-        low = min(arr[i], low);
-        high = max(arr[i], high);
+        if (arr[i] > max)
+            max = arr[i];
+        if (arr[i] < min)
+            min = arr[i];
     }
-    for (i = 0; i <= l - 1; i++)
+
+    for (i = 0; i < s; i++)
     {
-        if (arr[i] > low)
+        if (arr[i] > min)
         {
-            l = i;
+            s = i;
             break;
         }
     }
-    for (i = n - 1; i >= h + 1; i--)
+
+    for (i = n - 1; i >= e + 1; i--)
     {
-        if (arr[i] < high)
+        if (arr[i] < max)
         {
-            h = i;
+            e = i;
             break;
         }
     }
-    v.push_back(l);
-    v.push_back(h);
-    return v;
+    cout << "Min length of Unsorted array is " << e - s + 1 << endl;
+    return;
 }
 
 int main()
 {
-    int arr[] = {10, 12, 20, 30, 25, 40, 32, 31, 35, 50, 60};
+    int arr[] = {10, 12, 20, 30, 25,
+                 40, 32, 31, 35, 50, 60};
     int n = sizeof(arr) / sizeof(arr[0]);
-    vector<int> v = printUnsorted(arr, n);
-    cout << "Indices are: " << v[0] << " and " << v[1] << endl;
+    minLengthOfUnsorted(arr, n);
     return 0;
 }

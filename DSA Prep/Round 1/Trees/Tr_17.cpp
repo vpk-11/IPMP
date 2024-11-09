@@ -2,8 +2,6 @@
 #include <iostream>
 #include <queue>
 #include <stack>
-#include <algorithm>
-#include <vector>
 
 using namespace std;
 class Node
@@ -52,88 +50,78 @@ void create(Node *root)
     }
 }
 
-void PreOrder(Node *p)
+void Preorder(Node *p)
 {
     if (p)
     {
         cout << p->data << " ";
-        PreOrder(p->lchild);
-        PreOrder(p->rchild);
+        Preorder(p->lchild);
+        Preorder(p->rchild);
     }
 }
-
-void printLeaves(Node *root)
+void printLeaves(Node *p)
 {
-    if (root == NULL)
+    if (p == NULL)
     {
         return;
     }
-    printLeaves(root->lchild);
-
-    if (!(root->lchild) && !(root->lchild))
+    printLeaves(p->lchild);
+    if (p->lchild == NULL && p->rchild == NULL)
     {
-        cout << root->data << " ";
+        cout << p->data << " ";
     }
-    printLeaves(root->rchild);
+    printLeaves(p->rchild);
 }
-
-void printBoundaryLeft(Node *root)
+void printBoundaryLeft(Node *p)
 {
-    if (root == NULL)
+    if (p == NULL)
     {
         return;
     }
-    if (root->lchild)
+    if (p->lchild)
     {
-        cout << root->data << " ";
-        printBoundaryLeft(root->lchild);
+        cout << p->data << " ";
+        printBoundaryLeft(p->lchild);
     }
-    else if (root->rchild)
+    else if (p->rchild)
     {
-        cout << root->data << " ";
-        printBoundaryLeft(root->rchild);
+        cout << p->data << " ";
+        printBoundaryLeft(p->rchild);
     }
 }
-
-void printBoundaryRight(Node *root)
+void printBoundaryRight(Node *p)
 {
-    if (root == NULL)
+    if (p == NULL)
     {
         return;
     }
-    if (root->rchild)
+    if (p->lchild)
     {
-        printBoundaryRight(root->rchild);
-        cout << root->data << " ";
+        printBoundaryRight(p->rchild);
+        cout << p->data << " ";
     }
-    else if (root->lchild)
+    else if (p->rchild)
     {
-        printBoundaryRight(root->lchild);
-        cout << root->data << " ";
+        printBoundaryRight(p->lchild);
+        cout << p->data << " ";
     }
 }
-
-void printBoundary(Node *root)
+void printBoundary(Node *p)
 {
-    if (root == NULL)
+    cout << p->data << " ";
+    if (root->lchild || root->rchild)
     {
-        return;
+        printBoundaryLeft(p->lchild);
+        printLeaves(p);
+        printBoundaryRight(p->rchild);
     }
-    cout << root->data << " ";
-
-    printBoundaryLeft(root->lchild);
-
-    printLeaves(root->lchild);
-    printLeaves(root->rchild);
-
-    printBoundaryRight(root->rchild);
 }
 
 int main()
 {
     create(root);
     cout << "Preorder: ";
-    PreOrder(root);
+    Preorder(root);
     cout << endl;
     printBoundary(root);
     return 0;

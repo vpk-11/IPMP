@@ -1,7 +1,8 @@
-// Max Width of Tree
+// Maximum width of tree
 #include <iostream>
-#include <queue>
 #include <algorithm>
+#include <queue>
+#include <stack>
 
 using namespace std;
 class Node
@@ -50,52 +51,55 @@ void create(Node *root)
     }
 }
 
-void Preorder(Node *p)
+void maxWidth(Node *p)
 {
-    if (p)
-    {
-        cout << p->data << " ";
-        Preorder(p->lchild);
-        Preorder(p->rchild);
-    }
-}
-
-int maxWidth(Node *root)
-{
-    if(root == NULL){
-        return 0;
-    }
+    if (p == NULL)
+        return;
     queue<Node *> q;
-    Node *p;
-    q.push(root);
-    int result = 0;
+    cout << p->data << " ";
+    q.push(p);
+    int maxW = 0;
     while (!q.empty())
     {
         int count = q.size();
-        result = max(count, result);
-        while (count > 0)
+        maxW = max(count, maxW);
+        while (count--)
         {
             p = q.front();
             q.pop();
             if (p->lchild)
             {
+                cout << p->lchild->data << " ";
                 q.push(p->lchild);
             }
             if (p->rchild)
             {
+                cout << p->rchild->data << " ";
                 q.push(p->rchild);
             }
-            count--;
         }
     }
-    return result;
+    cout << endl <<"Max Width:  "<<maxW <<endl;
+    
+}
+
+void Rec_Preorder(Node *p)
+{
+    if (p)
+    {
+        cout << p->data << " ";
+        Rec_Preorder(p->lchild);
+        Rec_Preorder(p->rchild);
+    }
 }
 
 int main()
 {
     create(root);
     cout << "Preorder: ";
-    Preorder(root);
+    Rec_Preorder(root);
     cout << endl;
-    cout << "Maximum Width of Tree: " << maxWidth(root) << endl;
+    maxWidth(root);
+    cout << endl;
+    return 0;
 }

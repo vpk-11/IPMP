@@ -1,30 +1,26 @@
-// Remove the chars of 1 string from the other
+// Remove duplicate characters
 #include <iostream>
 #include <string>
-#include <map>
+#include <algorithm>
 using namespace std;
 
-string removeChars(string s1, string s2){
-    map<char, int> hash;
-    for (int i = 0; i < s2.size(); i++)
+string removeChars(string str1, string str2)
+{
+    for (int i = 0; i < str2.size(); i++)
     {
-        hash[s2[i]]++;
-    }
-    string res;
-    int index = 0;
-    while (index < s1.size())
-    {
-        if(hash[s1[index]] < 1){
-            res.push_back(s1[index]);
+        while (find(str1.begin(), str1.end(), str2[i]) != str1.end())
+        {
+            auto itr = find(str1.begin(), str1.end(), str2[i]);
+            str1.erase(itr);
         }
-        index++;
     }
-    return res;
+    return str1;
 }
-
-int main(){
-    string str1 = "geeksforgeeks";
-    string str2 = "mask";
- 
+int main()
+{
+    string str1, str2;
+    str1 = "hellofromtheotherside";
+    str2 = "gaylucas";
     cout << removeChars(str1, str2) << endl;
+    return 0;
 }

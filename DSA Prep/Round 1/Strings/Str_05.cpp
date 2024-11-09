@@ -1,25 +1,42 @@
-// Print Duplicates in String
-#include<iostream>
+// print duplicates
+#include <iostream>
 #include <string>
-#include <unordered_map>
+#include <vector>
+#include <utility>
+#include <map>
 using namespace std;
 
-void printDuplicates(string s){
-    unordered_map<char, int> hash;
-    for(int i = 0; i < s.size(); i++){
-        hash[s[i]]++;
-    }
-    for (auto it : hash)
+void printDuplicatesIndices(string str)
+{
+    // map<char, vector<int> > map;
+    // for (int i = 0; i < str.length(); i++)
+    // {
+    //     map[str[i]].push_back(i);
+    // }
+    // cout << "Char\t\tIndices" << endl;
+    // for (int i = 0; i < map.size(); i++)
+    // {
+    //     cout << str[i] << "\t\t";
+    //     for (int j = 0; j < map[str[i]].size(); j++)
+    //     {
+    //         cout << map[str[i]][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
+    map<char, int> map;
+    for (int i = 0; i < str.length(); i++)
+        map[str[i]]++;
+
+    for (auto it : map)
     {
-        if (it.second > 1)
-        {
-            cout << it.first << ", count = " << it.second << endl;
+        if (it.second > 1){
+            cout << it.first << ", count = " << it.second << "\n";
         }
     }
 }
 
-int main(){
+int main()
+{
     string str = "test string";
-    printDuplicates(str);
-    return 0;
+    printDuplicatesIndices(str);
 }

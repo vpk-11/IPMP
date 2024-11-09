@@ -1,9 +1,8 @@
-// Delete Tree
+// Delete a Tree
+// Size of Tree
 #include <iostream>
 #include <queue>
-#include <vector>
-#include <algorithm>
-#include <climits>
+#include <stack>
 
 using namespace std;
 class Node
@@ -62,14 +61,21 @@ void Preorder(Node *p)
     }
 }
 
-void deleteTree(Node *p)
+int count(Node *p)
 {
-    if (p == NULL)
-        return;
+    if (p)
+        return count(p->lchild) + count(p->rchild) + 1;
 
+    return 0;
+}
+// Tree should be deleted in Post Order Traversal style
+void deleteTree(Node *p){
+    if(p==NULL){
+        return;
+    }
     deleteTree(p->lchild);
     deleteTree(p->rchild);
-    cout << "Deleting " << p->data << endl;
+    cout<<"Deleted Node "<<p->data<<endl;
     delete p;
 }
 
@@ -79,10 +85,8 @@ int main()
     cout << "Preorder: ";
     Preorder(root);
     cout << endl;
+    cout << "No of Nodes: " << count(root) << endl;
     deleteTree(root);
     root = NULL;
-    cout << "Preorder: ";
-    Preorder(root);
-    cout << endl;
     return 0;
 }

@@ -1,9 +1,8 @@
-// Can Tree Be Folded
+// Convert to Sum Tree
 #include <iostream>
 #include <queue>
 #include <stack>
-#include <algorithm>
-#include <vector>
+#include <ctype.h>
 
 using namespace std;
 class Node
@@ -61,50 +60,16 @@ void Preorder(Node *p)
         Preorder(p->rchild);
     }
 }
-
-void mirror(Node *p)
+int toSumTree(Node *p)
 {
     if (p == NULL)
-        return;
-    else
     {
-        Node *temp;
-
-        mirror(p->lchild);
-        mirror(p->rchild);
-
-        temp = p->lchild;
-        p->lchild = p->rchild;
-        p->rchild = temp;
+        return 0;
     }
-}
+    int prevVal = p->data;
+    p->data = toSumTree(p->lchild) + toSumTree(p->rchild);
 
-bool isStructSame(Node *a, Node *b)
-{
-    if (a == NULL && b == NULL)
-    {
-        return true;
-    }
-    if (a != NULL && b != NULL && isStructSame(a->lchild, b->lchild) && isStructSame(a->rchild, b->rchild))
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool isFoldable(Node *p)
-{
-    if (p == NULL)
-        return true;
-
-    mirror(p->lchild);
-
-    bool res = isStructSame(p->lchild, p->rchild);
-
-    mirror(p->lchild);
-
-    return res;
+    return p->data + prevVal;
 }
 
 int main()
@@ -113,13 +78,9 @@ int main()
     cout << "Preorder: ";
     Preorder(root);
     cout << endl;
-    if (isFoldable(root))
-    {
-        cout << "Suiiii" << endl;
-    }
-    else
-    {
-        cout << "Die Stargen" << endl;
-    }
+    toSumTree(root);
+    cout << "Preorder: ";
+    Preorder(root);
+    cout << endl;
     return 0;
 }
